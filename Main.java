@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class DataStructureTesting {
+public class Main {
 
     /*
     Possible data format:
