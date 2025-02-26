@@ -1,6 +1,5 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
+import java.io.*;
 
 public class DataStructureTesting {
 
@@ -13,30 +12,18 @@ public class DataStructureTesting {
     sensorA,02/26/2025-13:13:00,75.29
     */
 
-    //Based on slide 4 of the presentation:
-    private HashMap<String, TreeMap<String, ArrayList<Double>>> hashmap = new HashMap<>();
-
-    //Other idea:
-    private HashMap<String, LinkedHashMap<String, Double>> hashmap2 = new HashMap<>();
+    private HashSet<Sensor> sensors = new HashSet<>();
 
     public static void main(String[] args) {
-        //do stuff
+        //do everything
     }
 
-    public void readData(File file) throws FileNotFoundException {
-        Scanner reader = new Scanner(file);
-        String line;
-        String[] tokens;
-        String sensorId;
-        String date;
-        double temperature;
-        while (reader.hasNextLine()) {
-            line = reader.nextLine();
-            tokens = line.split(",");
-            sensorId = tokens[0];
-            date = tokens[1];
-            temperature = Double.parseDouble(tokens[2]);
-        }
+    public void addData(String fileName) {
+        //convert and add new data to save file
+    }
+
+    public void readSave(File file) throws IOException {
+        //read saved data
     }
 
 }
