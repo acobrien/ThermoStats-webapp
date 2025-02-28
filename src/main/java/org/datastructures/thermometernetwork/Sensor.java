@@ -1,3 +1,5 @@
+package org.datastructures.thermometernetwork;
+
 import java.util.*;
 
 public class Sensor {

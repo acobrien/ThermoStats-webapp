@@ -1,3 +1,5 @@
+package org.datastructures.thermometernetwork;
+
 import java.util.Comparator;
 
 public class DateComparator implements Comparator<String> {
