@@ -1,7 +1,9 @@
 import java.util.Comparator;
 
-public class DayComparator implements Comparator<String> {
+public class DateComparator implements Comparator<String> {
+
     //Date format: MM/DD/YYYY
+    @Override
     public int compare(String date1, String date2) {
         int month1 = Integer.parseInt(date1.substring(0, 2));
         int day1 = Integer.parseInt(date1.substring(3, 5));
