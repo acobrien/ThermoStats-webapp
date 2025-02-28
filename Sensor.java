@@ -7,17 +7,17 @@ public class Sensor {
 
     public Sensor(String name) {
         this.name = name;
-        this.dayMap = new TreeMap<String, TreeMap<String, Double>>(new DayComparator());
+        this.dayMap = new TreeMap<>(new DayComparator());
     }
 
     public void addTemperature(String day, String time, double temperature) {
         if (!dayMap.containsKey(day)) {
-            dayMap.put(day, new TreeMap<String, Double>(new TimeComparator()));
+            dayMap.put(day, new TreeMap<>(new TimeComparator()));
         }
         dayMap.get(day).put(time, temperature);
     }
 
-    //Gets the TreeMap of temps for a day.
+    //Gets the TreeMap of temps for the supplied day.
     public TreeMap<String, Double> getDay(String day) {
         return dayMap.get(day);
     }
