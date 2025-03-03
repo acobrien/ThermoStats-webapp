@@ -64,12 +64,14 @@ Thermostat 1 - West Side
         PrintWriter out = new PrintWriter(fileWriter);
         String line;
         String[] tokens;
-        boolean even = false;
+        boolean even = true;
         //FIXME: Doesn't capture last bit of input; very weird
         while (in.hasNextLine()) {
             line = in.nextLine();
             tokens = line.split("[\t ]+"); //Splits on tabs, spaces or multiples of tabs/spaces. Works as expected.
-            out.print(epochToDateTime(tokens[1]));
+            if (even) {
+                out.print(epochToDateTime(tokens[1]));
+            }
             //Goes through every temp, on every line
             for (int i = 4; i < tokens.length; i++) {
 
@@ -121,12 +123,12 @@ Thermostat 1 - West Side
                     }// switch
                 }// else if
             }// for-loop
-            if (even) {
+            if (!even) {
                 out.println();
-                even = false;
+                even = true;
             }
             else {
-                even = true;
+                even = false;
             }
         }// while-loop
     }// method
