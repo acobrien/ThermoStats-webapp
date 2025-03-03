@@ -11,23 +11,29 @@ import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class Main /*extends Application*/ {
 
     private HashSet<Sensor> sensors = new HashSet<>();
 
     public static void main(String[] args) {
-        launch(args);
+        //launch(args); launches the gui
+        try {
+            saveNewData("testinput.txt", "saveFile.csv");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        Pane rootPane = buildGui();
-        Scene scene = new Scene(rootPane, 1024, 768);
-        scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Temperature Sensor Network");
-        primaryStage.show();
-    }
+//    @Override
+//    public void start(Stage primaryStage) {
+//        Pane rootPane = buildGui();
+//        Scene scene = new Scene(rootPane, 1024, 768);
+//        scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
+//        primaryStage.setScene(scene);
+//        primaryStage.setTitle("Temperature Sensor Network");
+//        primaryStage.show();
+//    }
 
     private Pane buildGui() {
         GridPane root = new GridPane();
@@ -73,55 +79,25 @@ public class Main extends Application {
             }
             //Goes through every temp, on every line
             for (int i = 4; i < tokens.length; i++) {
-
                 if (tokens[2].equals("0")) { // East Side
                     switch (i) {
-                        case 4:
-                            out.print(",MasterBed:" + tokens[4]);
+                        // Master Bedroom, Master Bathroom, Office, Ty's Bedroom,
+                        // Luke's Bedroom, Sabry's Bedroom, Living Room
+                        case 4, 5, 6, 7, 8, 9, 11:
+                            out.print("," + tokens[i]);
                             break;
-                        case 5:
-                            out.print(",MasterBath:" + tokens[5]);
-                            break;
-                        case 6:
-                            out.print(",Office:" + tokens[6]);
-                            break;
-                        case 7:
-                            out.print(",TyBed:" + tokens[7]);
-                            break;
-                        case 8:
-                            out.print(",LukeBed:" + tokens[8]);
-                            break;
-                        case 9:
-                            out.print(",SabryBed:" + tokens[9]);
-                            break;
-                        case 11: // 10 not in use
-                            out.print(",LivingRm:" + tokens[11]);
-                            break;
-                    }// switch
-                }// if
+                    }
+                }
                 else if (tokens[2].equals("1")) { // West Side
                     switch (i) {
-                        case 4:
-                            out.print(",BrodyBed:" + tokens[4]);
+                        // Brody's Bedroom, Kitchen, Den,
+                        // Bar, Living Room, Outside
+                        case 4, 5, 6, 7, 8, 11:
+                            out.print("," + tokens[i]);
                             break;
-                        case 5:
-                            out.print(",Kitchen:" + tokens[5]);
-                            break;
-                        case 6:
-                            out.print(",Den:" + tokens[6]);
-                            break;
-                        case 7:
-                            out.print(",Bar:" + tokens[7]);
-                            break;
-                        case 8:
-                            out.print(",LivingRm:" + tokens[8]);
-                            break;
-                        case 11: // 9 & 10 not in use
-                            out.print(",Outside," + tokens[11]);
-                            break;
-                    }// switch
-                }// else if
-            }// for-loop
+                    }
+                }
+            }
             if (!even) {
                 out.println();
                 even = true;
