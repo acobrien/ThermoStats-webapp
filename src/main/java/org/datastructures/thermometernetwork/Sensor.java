@@ -5,7 +5,7 @@ import java.util.*;
 public class Sensor {
 
     private final String sensorId;
-    private final TreeMap<String, TreeMap<String, Double>> dateMap;
+    private final TreeMap<String, LinkedHashMap<String, Double>> dateMap;
 
     public Sensor(String sensorId) {
         this.sensorId = sensorId;
@@ -14,13 +14,13 @@ public class Sensor {
 
     public void addTemperature(String date, String time, double temperature) {
         if (!dateMap.containsKey(date)) {
-            dateMap.put(date, new TreeMap<>(new TimeComparator()));
+            dateMap.put(date, new LinkedHashMap<>());
         }
         dateMap.get(date).put(time, temperature);
     }
 
-    //Gets the TreeMap of temps for the supplied date.
-    public TreeMap<String, Double> getDay(String date) {
+    //Gets the LinkedHashMap of temps for the supplied date.
+    public LinkedHashMap<String, Double> getDay(String date) {
         return dateMap.get(date);
     }
 
