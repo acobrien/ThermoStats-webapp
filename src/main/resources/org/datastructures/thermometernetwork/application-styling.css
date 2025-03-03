@@ -1,0 +1,60 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+    -fx-background-color: rgb(12, 12, 12);
+    -fx-padding: 10px, 10px, 10px, 10px;
+    -fx-hgap: 20px;
+    -fx-vgap: 20px;
+}
+
+.label {
+    -fx-font-size: 12pt;
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+}
+
+.button {
+    -fx-background-color: rgb(152, 255, 152, 0.75);
+    -fx-font-size: 12pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgb(50, 50, 50);
+    -fx-pref-width: 140px;
+    -fx-pref-height: 20px;
+}
+
+.text-field {
+    -fx-background-color: rgb(50, 50, 50);
+    -fx-font-size: 12pt;
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+}
+
+.combo-box {
+    -fx-background-color: rgb(50, 50, 50);
+    -fx-font-size: 12pt;
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: rgb(50, 50, 50);
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+}
+
+.radio-button .text {
+    -fx-font-size: 12pt;
+    -fx-fill: rgba(255, 255, 255, 0.75);
+}
+
+.display-area {
+    -fx-font-size: 10pt;
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-pref-height: 200px;
+    -fx-pref-width: 365px;
+}
+
+.display-area .content {
+    -fx-background-color: rgb(50, 50, 50);
+}
+
+.h_or_v_box {
+    -fx-padding: 10px;
+    -fx-spacing: 20px;
+}

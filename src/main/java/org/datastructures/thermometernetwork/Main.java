@@ -1,57 +1,58 @@
 package org.datastructures.thermometernetwork;
 
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
 
-// For converting epoch to date/time
-
-
-public class Main {
-
-    /*
-FORMAT: TIMESTAMP_24HR  TIMESTAMP_EPOCH  THERMOSTAT_NUM  SENSOR_TEMPS (IN ORDER)
-
-INFO:
--Date is included in name of file
--Temp reading of -1 means sensor is offline or not in use
-
-Thermostat 0 - East Side
--Sensor 0: HVAC Intake
--Sensor 1: Master Bedroom
--Sensor 2: Master Bathroom
--Sensor 3: Office
--Sensor 4: Ty's Bedroom
--Sensor 5: Luke's Bedroom
--Sensor 6: Sabry's Bedroom
--Sensor 7: Expansion (not in use)
--Sensor 8: Living Room
--Sensor 9: HVAC Supply
--Sensor 10: Average of 1,2,3,4,5,6,&8
-
-Thermostat 1 - West Side
--Sensor 0: HVAC Intake
--Sensor 1: Brody's Bedroom
--Sensor 2: Kitchen
--Sensor 3: Den
--Sensor 4: Bar
--Sensor 5: Living Room
--Sensor 6: Expansion (not in use)
--Sensor 7: Expansion (not in use)
--Sensor 8: Outside
--Sensor 9: HVAC Supply
--Sensor 10: Average of 1,2,3,4,&5
-     */
+public class Main extends Application {
 
     private HashSet<Sensor> sensors = new HashSet<>();
 
     public static void main(String[] args) {
-        try {
-            saveNewData("dump-2025-03-02.txt", "saveFile");
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        Pane rootPane = buildGui();
+        Scene scene = new Scene(rootPane, 1024, 768);
+        scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Temperature Sensor Network");
+        primaryStage.show();
+    }
+
+    private Pane buildGui() {
+        GridPane root = new GridPane();
+        root.setAlignment(Pos.CENTER);
+
+        root.add(buildTitle(), 0, 0);
+        //Examples:
+        //root.add(buildDataEntryRow(), 0, 1);
+        //root.add(buildDisplayRow(), 0, 2);
+        return root;
+    }
+
+    private Pane buildTitle() {
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getStyleClass().add("h_or_v_box");
+
+        Label title = new Label("Temperature Sensor Network");
+        title.setStyle("-fx-font-size: 40pt; -fx-font-weight: bold; " +
+                "-fx-text-fill: rgba(152, 255, 152, 0.75); -fx-padding: 10px;");
+
+        vBox.getChildren().add(title);
+        return vBox;
     }
 
     // Only method that should have to change for compatibility with other systems
