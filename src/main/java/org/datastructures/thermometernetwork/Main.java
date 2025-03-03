@@ -18,7 +18,7 @@ public class Main /*extends Application*/ {
     public static void main(String[] args) {
         //launch(args); launches the gui
         try {
-            saveNewData("testinput.txt", "saveFile.csv");
+            saveNewData("dump-2025-03-02.txt", "saveFile.csv");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -64,48 +64,57 @@ public class Main /*extends Application*/ {
     public static void saveNewData(String inFileName, String saveFileName) throws IOException {
         File inFile = new File(inFileName);
         File saveFile = new File(saveFileName);
-        Scanner in = new Scanner(inFile);
-        FileWriter fileWriter = new FileWriter(saveFile, true);
-        PrintWriter out = new PrintWriter(fileWriter);
-        String line;
-        String[] tokens;
-        boolean even = true;
-        //FIXME: Doesn't capture last bit of input; very weird
-        while (in.hasNextLine()) {
-            line = in.nextLine();
-            tokens = line.split("[\t ]+"); //Splits on tabs, spaces or multiples of tabs/spaces. Works as expected.
-            if (even) {
-                out.print(epochToDateTime(tokens[1]));
-            }
-            //Goes through every temp, on every line
-            for (int i = 4; i < tokens.length; i++) {
-                if (tokens[2].equals("0")) { // East Side
-                    switch (i) {
-                        // Master Bedroom, Master Bathroom, Office, Ty's Bedroom,
-                        // Luke's Bedroom, Sabry's Bedroom, Living Room
-                        case 4, 5, 6, 7, 8, 9, 11:
-                            out.print("," + tokens[i]);
-                            break;
-                    }
+
+        try (Scanner in = new Scanner(inFile);
+             FileWriter fileWriter = new FileWriter(saveFile, true);
+             PrintWriter out = new PrintWriter(fileWriter)) {
+
+            String line;
+            String[] tokens;
+            boolean even = true;
+
+            while (in.hasNextLine()) {
+                line = in.nextLine();
+                tokens = line.split("[\t ]+"); //Splits on tabs, spaces or multiples of tabs/spaces
+
+                if (even) { // Only prints timestamp once per two lines of input
+                    out.print(epochToDateTime(tokens[1]));
                 }
-                else if (tokens[2].equals("1")) { // West Side
-                    switch (i) {
-                        // Brody's Bedroom, Kitchen, Den,
-                        // Bar, Living Room, Outside
-                        case 4, 5, 6, 7, 8, 11:
-                            out.print("," + tokens[i]);
-                            break;
+
+                for (int i = 4; i < tokens.length; i++) {
+
+                    if (tokens[2].equals("0")) { // East Side
+                        switch (i) {
+                            // Master Bedroom, Master Bathroom, Office, Ty's Bedroom,
+                            // Luke's Bedroom, Sabry's Bedroom, Living Room
+                            case 4, 5, 6, 7, 8, 9, 11:
+                                out.print("," + tokens[i]);
+                                break;
+                        }
                     }
+
+                    else if (tokens[2].equals("1")) { // West Side
+                        switch (i) {
+                            // Brody's Bedroom, Kitchen, Den,
+                            // Bar, Living Room, Outside
+                            case 4, 5, 6, 7, 8, 11:
+                                out.print("," + tokens[i]);
+                                break;
+                        }
+                    }
+
+                }// for-loop
+
+                if (!even) { //Prints a \n once for every two lines of input
+                    out.println();
+                    even = true;
                 }
-            }
-            if (!even) {
-                out.println();
-                even = true;
-            }
-            else {
-                even = false;
-            }
-        }// while-loop
+                else {
+                    even = false;
+                }
+
+            }// while-loop
+        }// try-with-resources (automatically closes in and out)
     }// method
 
     // Converts epoch to MM/DD/YYYY-hh:mm:ss
