@@ -65,63 +65,60 @@ Thermostat 1 - West Side
         String line;
         String[] tokens;
 
-        //FIXME: Doesn't capture last two lines of input
+        //FIXME: Doesn't capture last few lines of input; very weird
         while (in.hasNextLine()) {
             line = in.nextLine();
             tokens = line.split("[\t ]+"); //Splits on tabs, spaces or multiples of tabs/spaces. Works as expected.
 
-            //FIXME: Doesn't work idk why
             //Goes through every temp, on every line
             for (int i = 4; i < tokens.length; i++) {
-                out.print(epochToDateTime(tokens[1]));
                 if (tokens[2].equals("0")) { // East Side
                     switch (i) {
                         case 4:
-                            out.print(",MasterBed," + tokens[4]);
+                            out.println(epochToDateTime(tokens[1]) + ",MasterBed," + tokens[4]);
                             break;
                         case 5:
-                            out.print(",MasterBath," + tokens[5]);
+                            out.println(epochToDateTime(tokens[1]) + ",MasterBath," + tokens[5]);
                             break;
                         case 6:
-                            out.print(",Office," + tokens[6]);
+                            out.println(epochToDateTime(tokens[1]) + ",Office," + tokens[6]);
                             break;
                         case 7:
-                            out.print(",TyBed," + tokens[7]);
+                            out.println(epochToDateTime(tokens[1]) + ",TyBed," + tokens[7]);
                             break;
                         case 8:
-                            out.print(",LukeBed," + tokens[8]);
+                            out.println(epochToDateTime(tokens[1]) + ",LukeBed," + tokens[8]);
                             break;
                         case 9:
-                            out.print(",SabryBed," + tokens[9]);
+                            out.println(epochToDateTime(tokens[1]) + ",SabryBed," + tokens[9]);
                             break;
                         case 11: // 10 not in use
-                            out.print(",LivingRm," + tokens[11]);
+                            out.println(epochToDateTime(tokens[1]) + ",LivingRm," + tokens[11]);
                             break;
                     }// switch
                 }// if
                 else if (tokens[2].equals("1")) { // West Side
                     switch (i) {
                         case 4:
-                            out.print(",BrodyBed," + tokens[4]);
+                            out.println(epochToDateTime(tokens[1]) + ",BrodyBed," + tokens[4]);
                             break;
                         case 5:
-                            out.print(",Kitchen," + tokens[5]);
+                            out.println(epochToDateTime(tokens[1]) + ",Kitchen," + tokens[5]);
                             break;
                         case 6:
-                            out.print(",Den," + tokens[6]);
+                            out.println(epochToDateTime(tokens[1]) + ",Den," + tokens[6]);
                             break;
                         case 7:
-                            out.print(",Bar," + tokens[7]);
+                            out.println(epochToDateTime(tokens[1]) + ",Bar," + tokens[7]);
                             break;
                         case 8:
-                            out.print(",LivingRm," + tokens[8]);
+                            out.println(epochToDateTime(tokens[1]) + ",LivingRm," + tokens[8]);
                             break;
                         case 11: // 9 & 10 not in use
-                            out.print(",LivingRm," + tokens[11]);
+                            out.println(epochToDateTime(tokens[1]) + ",LivingRm," + tokens[11]);
                             break;
                     }// switch
                 }// else if
-                out.println();
             }// for-loop
         }// while-loop
     }// method
