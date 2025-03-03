@@ -1,17 +1,15 @@
 package org.datastructures.thermometernetwork;
 
-import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.geometry.Pos;
+import javafx.stage.Stage;
 
 public class Main extends Application {
 
