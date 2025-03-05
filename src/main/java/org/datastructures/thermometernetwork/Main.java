@@ -13,12 +13,12 @@ import javafx.stage.Stage;
 
 public class Main /*extends Application*/ {
 
-    private HashSet<Thermostat> thermostats = new HashSet<>();
+    static ThermostatManager manager = new ThermostatManager();
 
     public static void main(String[] args) {
         //launch(args); launches the gui
         try {
-            saveNewData("dump-2025-03-02.txt", "saveFile.csv");
+            readSave("saveFile.csv");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -64,14 +64,22 @@ public class Main /*extends Application*/ {
     public static void saveNewData(String inFileName, String saveFileName) throws IOException {
         File inFile = new File(inFileName);
         File saveFile = new File(saveFileName);
+        String line;
+        String[] tokens;
+        boolean even = true;
 
         try (Scanner in = new Scanner(inFile);
              FileWriter fileWriter = new FileWriter(saveFile, true);
              PrintWriter out = new PrintWriter(fileWriter)) {
 
-            String line;
-            String[] tokens;
-            boolean even = true;
+            // Write metadata for thermostats/sensors if the save file is empty. Format:
+            // thermostat1Name,sensor1name,sensor2name...\n
+            // thermostat1Name,sensor1name,sensor2name...
+            if (saveFile.length() == 0) {
+                out.println("East Side,Master Bedroom,Master Bathroom,Office," +
+                        "Ty's Bedroom,Luke's Bedroom,Sabry's Bedroom,Living Room\n" +
+                        "West Side,Brody's Bedroom,Kitchen,Den,Bar,Living Room,Outside");
+            }
 
             while (in.hasNextLine()) {
                 line = in.nextLine();
@@ -81,43 +89,22 @@ public class Main /*extends Application*/ {
                     out.print(epochToDateTime(tokens[1]));
                 }
 
-                boolean eastSide = false;
-                boolean westSide = false;
-
                 for (int i = 4; i < tokens.length; i++) {
 
                     if (tokens[2].equals("0")) { // East Side
-
-                        if (!eastSide) { // prints an e before the east temperatures
-                            out.print(",e");
-                            eastSide = true;
-                        }
-
-                        switch (i) {
-                            // Master Bedroom, Master Bathroom, Office, Ty's Bedroom,
-                            // Luke's Bedroom, Sabry's Bedroom, Living Room
+                        switch (i) { // Ignores inactive sensors on East thermostat
                             case 4, 5, 6, 7, 8, 9, 11:
                                 out.print("," + tokens[i]);
                                 break;
                         }
-
                     }
 
                     else if (tokens[2].equals("1")) { // West Side
-
-                        if (!westSide) { // prints a w before the west temperatures
-                            out.print(",w");
-                            westSide = true;
-                        }
-
-                        switch (i) {
-                            // Brody's Bedroom, Kitchen, Den,
-                            // Bar, Living Room, Outside
+                        switch (i) { // Ignores inactive sensors on West thermostat
                             case 4, 5, 6, 7, 8, 11:
                                 out.print("," + tokens[i]);
                                 break;
                         }
-
                     }
 
                 }// for-loop
@@ -143,8 +130,39 @@ public class Main /*extends Application*/ {
         return dateFormat.format(date);// Format the date and time
     }
 
-    public void readSave(File file) throws IOException {
-        //read saved data
+    public static void readSave(String saveFileName) throws IOException {
+        File inFile = new File(saveFileName);
+        String line;
+        String[] firstDataLine;
+        double temperature;
+        String[] tokens;
+        boolean isMetaData = true;
+
+        try (Scanner in = new Scanner(inFile)) {
+
+            //Reads metadata and creates Thermostat and Sensor objects
+            while (in.hasNextLine()) {
+                line = in.nextLine();
+                tokens = line.split(",");
+
+                // Regex pattern for the date/time format
+                String dateTimeRegex = "^\\d{2}/\\d{2}/\\d{4}-\\d{2}:\\d{2}:\\d{2}$";
+
+                if (isMetaData && !tokens[0].matches(dateTimeRegex)) { //This line is metadata
+                    Thermostat thermostat = new Thermostat(tokens[0]);
+                    manager.addThermostat(thermostat);
+                    for (int i = 1; i < tokens.length; i++) {
+                        Sensor sensor = new Sensor(tokens[i]);
+                        manager.addSensor(thermostat, sensor); // Adds the current sensor to the current thermostat
+                    }
+                }
+
+                else {
+                    isMetaData = false;
+                    //process real data. going to be aggravating.
+                }
+            }
+        }
     }
 
 }
