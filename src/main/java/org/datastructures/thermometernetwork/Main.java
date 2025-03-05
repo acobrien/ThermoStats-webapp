@@ -13,6 +13,8 @@ public class Main /*extends Application*/ {
 
     public static void main(String[] args) {
         //launch(args); launches the gui
+
+        //testing
         try {
             manager.readSave("saveFile.csv");
         }
