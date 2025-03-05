@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class Main /*extends Application*/ {
 
-    private HashSet<Sensor> sensors = new HashSet<>();
+    private HashSet<Thermostat> thermostats = new HashSet<>();
 
     public static void main(String[] args) {
         //launch(args); launches the gui
@@ -81,9 +81,18 @@ public class Main /*extends Application*/ {
                     out.print(epochToDateTime(tokens[1]));
                 }
 
+                boolean eastSide = false;
+                boolean westSide = false;
+
                 for (int i = 4; i < tokens.length; i++) {
 
                     if (tokens[2].equals("0")) { // East Side
+
+                        if (!eastSide) { // prints an e before the east temperatures
+                            out.print(",e");
+                            eastSide = true;
+                        }
+
                         switch (i) {
                             // Master Bedroom, Master Bathroom, Office, Ty's Bedroom,
                             // Luke's Bedroom, Sabry's Bedroom, Living Room
@@ -91,9 +100,16 @@ public class Main /*extends Application*/ {
                                 out.print("," + tokens[i]);
                                 break;
                         }
+
                     }
 
                     else if (tokens[2].equals("1")) { // West Side
+
+                        if (!westSide) { // prints a w before the west temperatures
+                            out.print(",w");
+                            westSide = true;
+                        }
+
                         switch (i) {
                             // Brody's Bedroom, Kitchen, Den,
                             // Bar, Living Room, Outside
@@ -101,6 +117,7 @@ public class Main /*extends Application*/ {
                                 out.print("," + tokens[i]);
                                 break;
                         }
+
                     }
 
                 }// for-loop
@@ -114,19 +131,16 @@ public class Main /*extends Application*/ {
                 }
 
             }// while-loop
-        }// try-with-resources (automatically closes in and out)
+        }// try-with-resources (automatically closes scanner and printWriter)
     }// method
 
     // Converts epoch to MM/DD/YYYY-hh:mm:ss
     public static String epochToDateTime(String epochTimestampStr) {
         double epochTimestamp = Double.parseDouble(epochTimestampStr);
         long epochMillis = (long) (epochTimestamp * 1000);
-        // Create a Date object from the epoch milliseconds
-        Date date = new Date(epochMillis);
-        // Define the desired date and time format
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
-        // Format the date and time and return it as a string
-        return dateFormat.format(date);
+        Date date = new Date(epochMillis);// Create a Date object
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");// Define the desired format
+        return dateFormat.format(date);// Format the date and time
     }
 
     public void readSave(File file) throws IOException {
