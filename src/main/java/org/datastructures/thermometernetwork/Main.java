@@ -77,7 +77,7 @@ public class Main extends Application {
         loadSaveHBox.getChildren().addAll(loadSaveBtn, inputSaveNameTxf);
 
         HBox writeDataHBox = new HBox();
-        WriteDataHandler writeDataHandler = new WriteDafaHandler();
+        WriteDataHandler writeDataHandler = new WriteDataHandler();
         writeDataBtn.setOnAction(writeDataHandler);
         writeDataBtn.getStyleClass().add("button");
         writeDataHBox.getChildren().addAll(writeDataBtn, rawInputNameTxf, outputSaveNameTxf);
