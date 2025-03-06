@@ -7,16 +7,14 @@ import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
-public class Main /*extends Application*/ {
+public class Main extends Application {
 
     static ThermostatManager manager = new ThermostatManager();
 
     public static void main(String[] args) {
-        //launch(args); launches the gui
+        launch(args);
 
-        //testing
         try {
-            //manager.saveNewData("dump-2025-03-02.txt", "saveFile.csv");
             manager.readSave("saveFile.csv");
             System.out.println(manager.toString());
         }
@@ -25,23 +23,22 @@ public class Main /*extends Application*/ {
         }
     }
 
-//    @Override
-//    public void start(Stage primaryStage) {
-//        Pane rootPane = buildGui();
-//        Scene scene = new Scene(rootPane, 1024, 768);
-//        scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
-//        primaryStage.setScene(scene);
-//        primaryStage.setTitle("Temperature Sensor Network");
-//        primaryStage.show();
-//    }
+    @Override
+    public void start(Stage primaryStage) {
+        Pane rootPane = buildGui();
+        Scene scene = new Scene(rootPane, 1024, 768);
+        scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Temperature Sensor Network");
+        primaryStage.show();
+    }
 
     private Pane buildGui() {
         GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
 
         root.add(buildTitle(), 0, 0);
-        //Examples:
-        //root.add(buildDataEntryRow(), 0, 1);
+        root.add(buildReadWrite(), 0, 1);
         //root.add(buildDisplayRow(), 0, 2);
         return root;
     }
@@ -56,6 +53,16 @@ public class Main /*extends Application*/ {
                 "-fx-text-fill: rgba(152, 255, 152, 0.75); -fx-padding: 10px;");
 
         vBox.getChildren().add(title);
+        return vBox;
+    }
+
+    private Pane buildReadWrite() {
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getStyleClass().add("h_or_v_box");
+
+
+
         return vBox;
     }
 
