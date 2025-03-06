@@ -6,10 +6,19 @@ import java.text.SimpleDateFormat;
 
 public class ThermostatManager {
 
-    HashSet<Thermostat> thermostats = new HashSet<Thermostat>();
+    private final HashSet<Thermostat> thermostats = new HashSet<>();
 
     public ThermostatManager() {
         // Intentionally empty
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder msg = new StringBuilder();
+        for (Thermostat thermostat : thermostats) {
+            msg.append(thermostat.toString());
+        }
+        return msg.toString();
     }
 
     public boolean addThermostat(Thermostat thermostat) {
@@ -22,7 +31,7 @@ public class ThermostatManager {
 
     // Only method that should have to change for compatibility with other systems
     // Writes to the save file in our format; does NOT create objects or add to internal data structure
-    public static void saveNewData(String inFileName, String saveFileName) throws IOException {
+    public void saveNewData(String inFileName, String saveFileName) throws IOException {
         File inFile = new File(inFileName);
         File saveFile = new File(saveFileName);
         String line;
@@ -95,7 +104,7 @@ public class ThermostatManager {
         File inFile = new File(saveFileName);
         String line;
         String timestamp;
-        double temperature;
+        int temperatureIndex;
         String[] tokens;
         boolean isMetaData = true;
 
@@ -119,11 +128,13 @@ public class ThermostatManager {
                 }
 
                 else {
+                    temperatureIndex = 1;
                     isMetaData = false;
                     timestamp = tokens[0];
                     for (Thermostat thermostat : thermostats) {
                         for (Sensor sensor : thermostat.getSensors()) {
-                            thermostat.addEntry(sensor, timestamp, Double.parseDouble(in.next()));
+                            thermostat.addEntry(sensor, timestamp, Double.parseDouble(tokens[temperatureIndex]));
+                            temperatureIndex++;
                         }
                     }
                 }

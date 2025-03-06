@@ -16,7 +16,9 @@ public class Main /*extends Application*/ {
 
         //testing
         try {
+            //manager.saveNewData("dump-2025-03-02.txt", "saveFile.csv");
             manager.readSave("saveFile.csv");
+            System.out.println(manager.toString());
         }
         catch (Exception e) {
             e.printStackTrace();

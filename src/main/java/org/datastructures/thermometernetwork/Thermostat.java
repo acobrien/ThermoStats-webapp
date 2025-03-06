@@ -24,4 +24,13 @@ public class Thermostat {
         return true;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder msg = new StringBuilder("Thermostat: " + name + ", Sensors:\n");
+        for (Sensor sensor : sensors) {
+            msg.append(sensor.toString()).append("\n");
+        }
+        return msg + "\n";
+    }
+
 }

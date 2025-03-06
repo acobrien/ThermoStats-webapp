@@ -26,4 +26,9 @@ public class Sensor {
         return dateMap.get(date);
     }
 
+    @Override
+    public String toString() {
+        return sensorId + ": " + dateMap.toString();
+    }
+
 }
