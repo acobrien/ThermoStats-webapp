@@ -1,6 +1,8 @@
 package org.datastructures.thermometernetwork;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -69,19 +71,33 @@ public class Main extends Application {
         vBox.getStyleClass().add("h_or_v_box");
 
         HBox loadSaveHBox = new HBox();
-//        LoadSaveHandler loadSaveHandler = new LoadSaveHandler();
-//        loadSaveBtn.setOnAction(loadSaveHandler);
+        LoadSaveHandler loadSaveHandler = new LoadSaveHandler();
+        loadSaveBtn.setOnAction(loadSaveHandler);
         loadSaveBtn.getStyleClass().add("button");
         loadSaveHBox.getChildren().addAll(loadSaveBtn, inputSaveNameTxf);
 
         HBox writeDataHBox = new HBox();
-//        WriteDataHandler writeDataHandler = new WriteDafaHandler();
-//        writeDataBtn.setOnAction(writeDataHandler);
+        WriteDataHandler writeDataHandler = new WriteDafaHandler();
+        writeDataBtn.setOnAction(writeDataHandler);
         writeDataBtn.getStyleClass().add("button");
         writeDataHBox.getChildren().addAll(writeDataBtn, rawInputNameTxf, outputSaveNameTxf);
 
         vBox.getChildren().addAll(loadSaveHBox, writeDataHBox);
         return vBox;
+    }
+
+    private class LoadSaveHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+
+        }
+    }
+
+    private class WriteDataHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+
+        }
     }
 
 }
