@@ -15,4 +15,13 @@ public class Thermostat {
         return sensors.add(sensor);
     }
 
+    public HashSet<Sensor> getSensors() {
+        return sensors;
+    }
+
+    public boolean addEntry(Sensor sensor, String timestamp, double temperature) {
+        sensor.addTemperature(timestamp, temperature);
+        return true;
+    }
+
 }

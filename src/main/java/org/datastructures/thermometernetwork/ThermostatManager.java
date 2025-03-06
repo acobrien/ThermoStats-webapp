@@ -94,14 +94,13 @@ public class ThermostatManager {
     public void readSave(String saveFileName) throws IOException {
         File inFile = new File(saveFileName);
         String line;
-        String[] firstDataLine;
+        String timestamp;
         double temperature;
         String[] tokens;
         boolean isMetaData = true;
 
         try (Scanner in = new Scanner(inFile)) {
 
-            //Reads metadata and creates Thermostat and Sensor objects
             while (in.hasNextLine()) {
                 line = in.nextLine();
                 tokens = line.split(",");
@@ -109,6 +108,7 @@ public class ThermostatManager {
                 // Regex pattern for the date/time format
                 String dateTimeRegex = "^\\d{2}/\\d{2}/\\d{4}-\\d{2}:\\d{2}:\\d{2}$";
 
+                //Reads metadata and creates Thermostat and Sensor objects
                 if (isMetaData && !tokens[0].matches(dateTimeRegex)) { //This line is metadata
                     Thermostat thermostat = new Thermostat(tokens[0]);
                     addThermostat(thermostat);
@@ -120,7 +120,12 @@ public class ThermostatManager {
 
                 else {
                     isMetaData = false;
-                    //process real data. going to be aggravating I think.
+                    timestamp = tokens[0];
+                    for (Thermostat thermostat : thermostats) {
+                        for (Sensor sensor : thermostat.getSensors()) {
+                            thermostat.addEntry(sensor, timestamp, Double.parseDouble(in.next()));
+                        }
+                    }
                 }
             }
         }

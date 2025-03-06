@@ -11,11 +11,14 @@ public class Sensor {
         this.sensorId = sensorId;
     }
 
-    public void addTemperature(String date, String time, double temperature) {
-        if (!dateMap.containsKey(date)) {
-            dateMap.put(date, new LinkedHashMap<>());
+    public void addTemperature(String timestamp, double temperature) {
+        String date = timestamp.substring(0, 10);
+        String time = timestamp.substring(11);
+        if (dateMap.containsKey(date)) {
+            dateMap.get(date).put(time, temperature);
+            return;
         }
-        dateMap.get(date).put(time, temperature);
+        dateMap.put(date, new LinkedHashMap<>());
     }
 
     //Gets the LinkedHashMap of temps for the supplied date.
