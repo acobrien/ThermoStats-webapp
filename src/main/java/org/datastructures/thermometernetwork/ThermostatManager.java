@@ -31,7 +31,7 @@ public class ThermostatManager {
 
     // Only method that should have to change for compatibility with other systems
     // Writes to the save file in our format; does NOT create objects or add to internal data structure
-    public void saveNewData(String inFileName, String saveFileName) throws IOException {
+    public void writeToSave(String inFileName, String saveFileName) throws IOException {
         File inFile = new File(inFileName);
         File saveFile = new File(saveFileName);
         String line;
@@ -100,7 +100,7 @@ public class ThermostatManager {
         return dateFormat.format(date);// Format the date and time
     }
 
-    public void readSave(String saveFileName) throws IOException {
+    public void loadSave(String saveFileName) throws IOException {
         File inFile = new File(saveFileName);
         String line;
         String timestamp;

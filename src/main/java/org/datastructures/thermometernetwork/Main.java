@@ -2,20 +2,27 @@ package org.datastructures.thermometernetwork;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    static ThermostatManager manager = new ThermostatManager();
+    private static final ThermostatManager manager = new ThermostatManager();
+    private final Button loadSaveBtn = new Button("Load Save");
+    private final Button writeDataBtn = new Button("Write Data");
+    private final TextField rawInputNameTxf = new TextField("example-input.txt");
+    private final TextField outputSaveNameTxf = new TextField("example-output-save.csv");
+    private final TextField inputSaveNameTxf = new TextField("example-input-save.csv");
 
     public static void main(String[] args) {
         launch(args);
 
         try {
-            manager.readSave("saveFile.csv");
+            manager.loadSave("saveFile.csv");
             System.out.println(manager.toString());
         }
         catch (Exception e) {
@@ -61,8 +68,19 @@ public class Main extends Application {
         vBox.setAlignment(Pos.CENTER);
         vBox.getStyleClass().add("h_or_v_box");
 
+        HBox loadSaveHBox = new HBox();
+//        LoadSaveHandler loadSaveHandler = new LoadSaveHandler();
+//        loadSaveBtn.setOnAction(loadSaveHandler);
+        loadSaveBtn.getStyleClass().add("button");
+        loadSaveHBox.getChildren().addAll(loadSaveBtn, inputSaveNameTxf);
 
+        HBox writeDataHBox = new HBox();
+//        WriteDataHandler writeDataHandler = new WriteDafaHandler();
+//        writeDataBtn.setOnAction(writeDataHandler);
+        writeDataBtn.getStyleClass().add("button");
+        writeDataHBox.getChildren().addAll(writeDataBtn, rawInputNameTxf, outputSaveNameTxf);
 
+        vBox.getChildren().addAll(loadSaveHBox, writeDataHBox);
         return vBox;
     }
 
