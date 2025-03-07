@@ -24,6 +24,8 @@ public class Main extends Application {
     private static final ThermostatManager manager = new ThermostatManager();
     private final Button loadSaveBtn = new Button("Load Save");
     private final Button writeDataBtn = new Button("Write Data");
+    private final Button analysisBtn = new Button("Analysis");
+    private final Button storageBtn = new Button("Storage");
     private final TextField rawInputNameTxf = new TextField("example-input.txt");
     private final TextField outputSaveNameTxf = new TextField("example-output-save.csv");
     private final TextField inputSaveNameTxf = new TextField("example-input-save.csv");
@@ -64,6 +66,7 @@ public class Main extends Application {
     
     private Pane buildListsGui() {
     	GridPane root = new GridPane();
+    	root.setAlignment(Pos.CENTER);
     	
     	root.getStyleClass().add("grid");
     	
@@ -74,6 +77,43 @@ public class Main extends Application {
 		root.add(buildSensorsEntry(), 1, 0);
 		root.add(buildDatesEntry(), 2, 0);
 		root.add(buildTimeAndTempEntry(), 3, 0);
+		
+		HBox analysisHBox = new HBox();
+		analysisHBox.setAlignment(Pos.CENTER);
+        AnalysisHandler analysisHandler = new AnalysisHandler();
+        analysisBtn.setOnAction(analysisHandler);
+        analysisBtn.getStyleClass().add("button");
+        analysisHBox.getChildren().addAll(analysisBtn);
+       
+        root.add(analysisHBox, 3, 1);
+		
+        return root;
+    }
+    
+    private Pane buildAnalysisGui() {
+        GridPane root = new GridPane();
+        root.setAlignment(Pos.CENTER);
+        
+        Image comingSoonImage = new Image(getClass().getResourceAsStream("ComingSoon.png"));
+        ImageView imageView = new ImageView();
+        imageView.setImage(comingSoonImage);
+        
+        Label comingSoonLabel = new Label("Analysis, graphs, and more functionality will be added for problem two!", imageView);
+        comingSoonLabel.setContentDisplay(ContentDisplay.TOP);
+        
+        comingSoonLabel.setStyle("-fx-font-size: 15pt; -fx-font-weight: bold; " +
+                "-fx-text-fill: rgba(152, 255, 152, .50); -fx-padding: 10px;");
+        
+        HBox storageHBox = new HBox();
+		storageHBox.setAlignment(Pos.CENTER);
+        StorageHandler storageHandler = new StorageHandler();
+        storageBtn.setOnAction(storageHandler);
+        storageBtn.getStyleClass().add("button");
+        storageHBox.getChildren().addAll(storageBtn);
+
+        root.add(comingSoonLabel, 0, 0);
+        root.add(storageHBox, 0, 1);
+        
         return root;
     }
 
@@ -122,14 +162,14 @@ public class Main extends Application {
         public void handle(ActionEvent event) {
         	try {
 				manager.loadSave("saveFile.csv");
+				Pane rootPane = buildListsGui();
+	            Scene scene = new Scene(rootPane, 1024, 768);
+	            scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
+	            mainStage.setScene(scene);
+	            mainStage.show();
 			} catch (IOException e) {	
 				e.printStackTrace();
 			}
-        	Pane rootPane = buildListsGui();
-            Scene scene = new Scene(rootPane, 1024, 768);
-            scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
-            mainStage.setScene(scene);
-            mainStage.show();
         }
     }
 
@@ -137,6 +177,28 @@ public class Main extends Application {
         @Override
         public void handle(ActionEvent event) {
 
+        }
+    }
+    
+    private class AnalysisHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+        	Pane rootPane = buildAnalysisGui();
+            Scene scene = new Scene(rootPane, 1024, 768);
+            scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
+            mainStage.setScene(scene);
+            mainStage.show();
+        }
+    }
+    
+    private class StorageHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+        	Pane rootPane = buildListsGui();
+            Scene scene = new Scene(rootPane, 1024, 768);
+            scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
+            mainStage.setScene(scene);
+            mainStage.show();
         }
     }
     
@@ -212,7 +274,6 @@ public class Main extends Application {
 		dates.setOnMouseClicked(new DatesClickedEvent());
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void populateTimeAndTempsEntry(Sensor s, String date) {
 		timesAndTemps.getItems().clear();
 		if (s != null) {
