@@ -66,6 +66,7 @@ public class Main extends Application {
     	GridPane root = new GridPane();
     	
     	root.getStyleClass().add("grid");
+    	root.setAlignment(Pos.CENTER);
     	
 		root.add(buildThermostatsEntry(), 0, 0);
 		populateThermostatsEntry();
@@ -142,8 +143,9 @@ public class Main extends Application {
     
     private Pane buildThermostatsEntry() {
 		thermostats.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		thermostats.setPrefHeight(500);
-		thermostats.setPrefWidth(250);
+		thermostats.setPrefHeight(mainStage.getHeight() / 1.4);
+		thermostats.setPrefWidth(mainStage.getWidth() / 5);
+		
 		VBox vBox = new VBox();
 		vBox.getStyleClass().add("h_or_v_box");
 		Label lbl = new Label("Thermostats\nFormat: ID");
@@ -155,8 +157,8 @@ public class Main extends Application {
 	
 	private Pane buildSensorsEntry() {
 		sensors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		sensors.setPrefHeight(500);
-		sensors.setPrefWidth(250);
+		sensors.setPrefHeight(mainStage.getHeight() / 1.4);
+		sensors.setPrefWidth(mainStage.getWidth() / 5);
 		VBox vBox = new VBox();
 		vBox.getStyleClass().add("h_or_v_box");
 		Label lbl = new Label("Sensors\nFormat: ID");
@@ -168,8 +170,8 @@ public class Main extends Application {
 	
 	private Pane buildDatesEntry() {
 		dates.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		dates.setPrefHeight(500);
-		dates.setPrefWidth(250);
+		dates.setPrefHeight(mainStage.getHeight() / 1.4);
+		dates.setPrefWidth(mainStage.getWidth() / 5);
 		VBox vBox = new VBox();
 		vBox.getStyleClass().add("h_or_v_box");
 		Label lbl = new Label("Dates\nFormat: Date");
@@ -181,8 +183,8 @@ public class Main extends Application {
 	
 	private Pane buildTimeAndTempEntry() {
 		timesAndTemps.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		timesAndTemps.setPrefHeight(500);
-		timesAndTemps.setPrefWidth(250);
+		timesAndTemps.setPrefHeight(mainStage.getHeight() / 1.4);
+		timesAndTemps.setPrefWidth(mainStage.getWidth() / 5);
 		VBox vBox = new VBox();
 		vBox.getStyleClass().add("h_or_v_box");
 		Label lbl = new Label("Time and Temp\nFormat: Time : Temp");
@@ -212,7 +214,6 @@ public class Main extends Application {
 		dates.setOnMouseClicked(new DatesClickedEvent());
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void populateTimeAndTempsEntry(Sensor s, String date) {
 		timesAndTemps.getItems().clear();
 		if (s != null) {
