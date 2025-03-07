@@ -1,6 +1,7 @@
 package org.datastructures.thermometernetwork;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class Sensor {
 
@@ -27,7 +28,7 @@ public class Sensor {
     }
     
     //Gets stringified list of temps in map ONLY FOR READABILITY
-    public LinkedHashSet<String> getDayTimesAndTemps(LinkedHashMap<String, Double> dayMap) {
+    public LinkedHashSet getDayTimesAndTemps(LinkedHashMap<String, Double> dayMap) {
     	LinkedHashSet<String> dayTimesAndTemps = new LinkedHashSet<>();
     	dayMap.forEach((key, value)  -> {
     		String combo = key + " : " + value;
