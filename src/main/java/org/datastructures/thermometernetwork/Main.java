@@ -7,10 +7,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
@@ -76,12 +79,18 @@ public class Main extends Application {
 
     private Pane buildTitle() {
         VBox vBox = new VBox();
-        vBox.setAlignment(Pos.CENTER);
+        vBox.setAlignment(Pos.TOP_CENTER);
         vBox.getStyleClass().add("h_or_v_box");
-
-        Label title = new Label("Temperature Sensor Network");
-        title.setStyle("-fx-font-size: 40pt; -fx-font-weight: bold; " +
-                "-fx-text-fill: rgba(152, 255, 152, 0.75); -fx-padding: 10px;");
+        
+        Image logo = new Image(getClass().getResourceAsStream("ThermostatsLogo.png"));
+        ImageView logoView = new ImageView();
+        logoView.setImage(logo);
+        
+        Label title = new Label("Project By: Luke Fisher, Aidan O'Brien, Cody Hyers, Jason Ackerman Jr, and Meet Patel", logoView);
+        title.setContentDisplay(ContentDisplay.TOP);
+        
+        title.setStyle("-fx-font-size: 8pt; -fx-font-weight: bold; " +
+                "-fx-text-fill: rgba(152, 255, 152, .50); -fx-padding: 10px;");
 
         vBox.getChildren().add(title);
         return vBox;
@@ -89,7 +98,7 @@ public class Main extends Application {
 
     private Pane buildReadWrite() {
         VBox vBox = new VBox();
-        vBox.setAlignment(Pos.CENTER);
+        vBox.setAlignment(Pos.BOTTOM_CENTER);
         vBox.getStyleClass().add("h_or_v_box");
 
         HBox loadSaveHBox = new HBox();
