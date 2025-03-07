@@ -28,6 +28,10 @@ public class ThermostatManager {
     public boolean addSensor(Thermostat thermostat, Sensor sensor) {
         return thermostat.addSensor(sensor);
     }
+    
+    public HashSet<Thermostat> getThermostats() {
+    	return thermostats;
+    }
 
     // Only method that should have to change for compatibility with other systems
     // Writes to the save file in our format; does NOT create objects or add to internal data structure

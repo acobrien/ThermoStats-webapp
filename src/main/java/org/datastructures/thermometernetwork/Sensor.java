@@ -25,6 +25,10 @@ public class Sensor {
     public LinkedHashMap<String, Double> getDay(String date) {
         return dateMap.get(date);
     }
+    
+    public Set<String> getDates(){
+    	return dateMap.keySet();
+    }
 
     @Override
     public String toString() {
