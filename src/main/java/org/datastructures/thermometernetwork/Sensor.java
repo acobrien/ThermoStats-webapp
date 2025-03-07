@@ -1,6 +1,7 @@
 package org.datastructures.thermometernetwork;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class Sensor {
 
@@ -22,8 +23,18 @@ public class Sensor {
     }
 
     //Gets the LinkedHashMap of temps for the supplied date.
-    public LinkedHashMap<String, Double> getDay(String date) {
+    public LinkedHashMap<String, Double> getDayMap(String date) {
         return dateMap.get(date);
+    }
+    
+    //Gets stringified list of temps in map ONLY FOR READABILITY
+    public LinkedHashSet getDayTimesAndTemps(LinkedHashMap<String, Double> dayMap) {
+    	LinkedHashSet<String> dayTimesAndTemps = new LinkedHashSet<>();
+    	dayMap.forEach((key, value)  -> {
+    		String combo = key + " : " + value;
+    		dayTimesAndTemps.add(combo);
+    	});
+    	return dayTimesAndTemps;  
     }
     
     public Set<String> getDates(){
@@ -32,7 +43,8 @@ public class Sensor {
 
     @Override
     public String toString() {
-        return sensorId + ": " + dateMap.toString();
+        return sensorId;
+        //REMOVED TEMPORARILY: ": " + dateMap.toString()
     }
 
 }

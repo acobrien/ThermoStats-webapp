@@ -26,11 +26,13 @@ public class Thermostat {
 
     @Override
     public String toString() {
-        StringBuilder msg = new StringBuilder("Thermostat: " + name + ", Sensors:\n");
-        for (Sensor sensor : sensors) {
-            msg.append(sensor.toString()).append("\n");
-        }
-        return msg + "\n";
+    	//REMOVED TEMPORARILY:
+        //StringBuilder msg = new StringBuilder("Thermostat: " + name + ", Sensors:\n");
+        //for (Sensor sensor : sensors) {
+        //    msg.append(sensor.toString()).append("\n");
+        //}
+        //return msg + "\n";
+    	return name;
     }
 
 }

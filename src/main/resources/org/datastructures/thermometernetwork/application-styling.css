@@ -10,6 +10,7 @@
 .label {
     -fx-font-size: 12pt;
     -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-alignment: center;
 }
 
 .button {
@@ -57,4 +58,9 @@
 .h_or_v_box {
     -fx-padding: 10px;
     -fx-spacing: 20px;
+}
+
+.list-cell{
+	-fx-alignment: center;
+	-fx-font-size: 15pt;
 }

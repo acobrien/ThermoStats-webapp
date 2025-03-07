@@ -2,10 +2,6 @@ package org.datastructures.thermometernetwork;
 
 import java.io.IOException;
 
-import org.datastructures.thermometernetwork.Main.DatesClickedEvent;
-import org.datastructures.thermometernetwork.Main.SensorsClickedEvent;
-import org.datastructures.thermometernetwork.Main.ThermostatsClickedEvent;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,7 +31,7 @@ public class Main extends Application {
 	private Thermostat currThermostat;
 	private Sensor currSensor;
 	private String currDate;
-	private String currTimeAndTemp;
+	//private String currTimeAndTemp;
 	private Stage mainStage = new Stage();
 
     public static void main(String[] args) {
@@ -207,10 +203,11 @@ public class Main extends Application {
 		dates.setOnMouseClicked(new DatesClickedEvent());
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void populateTimeAndTempsEntry(Sensor s, String date) {
 		timesAndTemps.getItems().clear();
 		if (s != null) {
-			//timesAndTemps.getItems().addAll(s.getDay(date));
+			timesAndTemps.getItems().addAll(s.getDayTimesAndTemps(s.getDayMap(date)));
 		}
 		dates.setOnMouseClicked(new DatesClickedEvent());
 	}
@@ -220,6 +217,7 @@ public class Main extends Application {
 		@Override
 		public void handle(MouseEvent event) {
 			currThermostat = thermostats.getSelectionModel().getSelectedItem();
+			timesAndTemps.getItems().clear();
 			if (currThermostat != null) {
 				populateSensorsEntry(currThermostat);
 				populateDatesEntry(null);
@@ -232,6 +230,7 @@ public class Main extends Application {
 		@Override
 		public void handle(MouseEvent event) {
 			currSensor = sensors.getSelectionModel().getSelectedItem();
+			timesAndTemps.getItems().clear();
 			if (currThermostat != null && currSensor !=  null) {
 				populateDatesEntry(currSensor);
 			}
