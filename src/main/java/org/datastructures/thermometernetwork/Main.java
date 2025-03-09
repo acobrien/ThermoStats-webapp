@@ -37,7 +37,7 @@ public class Main extends Application {
 	private Sensor currSensor;
 	private String currDate;
 	//private String currTimeAndTemp;
-	private Stage mainStage = new Stage();
+	private final Stage mainStage = new Stage();
 
     public static void main(String[] args) {
         launch(args);
@@ -161,13 +161,14 @@ public class Main extends Application {
         @Override
         public void handle(ActionEvent event) {
         	try {
-				manager.loadSave("saveFile.csv");
+				manager.loadSave(inputSaveNameTxf.getText());
 				Pane rootPane = buildListsGui();
 	            Scene scene = new Scene(rootPane, 1024, 768);
 	            scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
 	            mainStage.setScene(scene);
 	            mainStage.show();
-			} catch (IOException e) {	
+			}
+			catch (IOException e) {
 				e.printStackTrace();
 			}
         }
@@ -176,7 +177,12 @@ public class Main extends Application {
     private class WriteDataHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-
+			try {
+				manager.writeToSave(rawInputNameTxf.getText(), outputSaveNameTxf.getText());
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
         }
     }
     
