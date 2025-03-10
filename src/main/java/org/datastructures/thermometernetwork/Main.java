@@ -1,6 +1,8 @@
 package org.datastructures.thermometernetwork;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -24,11 +26,14 @@ public class Main extends Application {
     private static final ThermostatManager manager = new ThermostatManager();
     private final Button loadSaveBtn = new Button("Load Save");
     private final Button writeDataBtn = new Button("Write Data");
+    private final Button wipeSaveBtn = new Button("Wipe Save");
+    private final Button loadDataBtn = new Button("Add Data");
     private final Button analysisBtn = new Button("Analysis");
     private final Button storageBtn = new Button("Storage");
     private final TextField rawInputNameTxf = new TextField("example-input.txt");
     private final TextField outputSaveNameTxf = new TextField("example-output-save.csv");
     private final TextField inputSaveNameTxf = new TextField("example-input-save.csv");
+    private final TextField loadDataNameTxf = new TextField("example-input-save.csv");
     private ListView<Sensor> sensors = new ListView<>();
 	private ListView<Thermostat> thermostats = new ListView<>();
 	private ListView<String> dates = new ListView<>();
@@ -36,7 +41,9 @@ public class Main extends Application {
 	private Thermostat currThermostat;
 	private Sensor currSensor;
 	private String currDate;
-	//private String currTimeAndTemp;
+	private String saveFileName = "";
+	private Label startErrorOutput = new Label();
+	private Label listsErrorOutput = new Label();
 	private final Stage mainStage = new Stage();
 
     public static void main(String[] args) {
@@ -45,12 +52,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+    	mainStage.setMinWidth(1024);
+    	mainStage.setMinHeight(768);
     	primaryStage = mainStage;
         Pane rootPane = buildStartGui();
         Scene scene = new Scene(rootPane, 1024, 768);
         scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Temperature Sensor Network");
+        primaryStage.setTitle("ThermoStats - Temperature Sensor Network");
         primaryStage.show();
     }
 
@@ -58,66 +67,13 @@ public class Main extends Application {
         GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
 
-        root.add(buildTitle(), 0, 0);
-        root.add(buildReadWrite(), 0, 1);
-        //root.add(buildDisplayRow(), 0, 2);
-        return root;
-    }
-    
-    private Pane buildListsGui() {
-    	GridPane root = new GridPane();
-    	root.setAlignment(Pos.CENTER);
-    	
-    	root.getStyleClass().add("grid");
-    	
-		root.add(buildThermostatsEntry(), 0, 0);
-		populateThermostatsEntry();
-		thermostats.setOnMouseClicked(new ThermostatsClickedEvent());
-		
-		root.add(buildSensorsEntry(), 1, 0);
-		root.add(buildDatesEntry(), 2, 0);
-		root.add(buildTimeAndTempEntry(), 3, 0);
-		
-		HBox analysisHBox = new HBox();
-		analysisHBox.setAlignment(Pos.CENTER);
-        AnalysisHandler analysisHandler = new AnalysisHandler();
-        analysisBtn.setOnAction(analysisHandler);
-        analysisBtn.getStyleClass().add("button");
-        analysisHBox.getChildren().addAll(analysisBtn);
-       
-        root.add(analysisHBox, 3, 1);
-		
-        return root;
-    }
-    
-    private Pane buildAnalysisGui() {
-        GridPane root = new GridPane();
-        root.setAlignment(Pos.CENTER);
-        
-        Image comingSoonImage = new Image(getClass().getResourceAsStream("ComingSoon.png"));
-        ImageView imageView = new ImageView();
-        imageView.setImage(comingSoonImage);
-        
-        Label comingSoonLabel = new Label("Analysis, graphs, and more functionality will be added for problem two!", imageView);
-        comingSoonLabel.setContentDisplay(ContentDisplay.TOP);
-        
-        comingSoonLabel.setStyle("-fx-font-size: 15pt; -fx-font-weight: bold; " +
-                "-fx-text-fill: rgba(152, 255, 152, .50); -fx-padding: 10px;");
-        
-        HBox storageHBox = new HBox();
-		storageHBox.setAlignment(Pos.CENTER);
-        StorageHandler storageHandler = new StorageHandler();
-        storageBtn.setOnAction(storageHandler);
-        storageBtn.getStyleClass().add("button");
-        storageHBox.getChildren().addAll(storageBtn);
-
-        root.add(comingSoonLabel, 0, 0);
-        root.add(storageHBox, 0, 1);
-        
+        root.add(buildStartTitle(), 0, 0);
+        root.add(buildStartReadWrite(), 0, 1);
+        root.add(buildStartOutput(), 0, 2);
         return root;
     }
 
-    private Pane buildTitle() {
+    private Pane buildStartTitle() {
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.TOP_CENTER);
         vBox.getStyleClass().add("h_or_v_box");
@@ -135,8 +91,22 @@ public class Main extends Application {
         vBox.getChildren().add(title);
         return vBox;
     }
+    
+    private Pane buildStartOutput() {
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.getStyleClass().add("h_or_v_box");
+        
+        startErrorOutput.setContentDisplay(ContentDisplay.TOP);
+        
+        startErrorOutput.setStyle("-fx-font-size: 12pt; -fx-font-weight: bold; " +
+                "-fx-text-fill: rgba(255, 0, 0, .75); -fx-padding: 10px;");
+        
+        vBox.getChildren().add(startErrorOutput);
+        return vBox;
+    }
 
-    private Pane buildReadWrite() {
+    private Pane buildStartReadWrite() {
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.BOTTOM_CENTER);
         vBox.getStyleClass().add("h_or_v_box");
@@ -156,12 +126,111 @@ public class Main extends Application {
         vBox.getChildren().addAll(loadSaveHBox, writeDataHBox);
         return vBox;
     }
+    
+    private Pane buildListsGui() {
+    	GridPane root = new GridPane();
+    	root.setAlignment(Pos.CENTER);
+    	root.getStyleClass().add("grid");
+    	
+    	VBox vBox = new VBox();
+        vBox.setAlignment(Pos.BOTTOM_CENTER);
+        vBox.getStyleClass().add("h_or_v_box");
+        
+        HBox listsHBox = new HBox();
+		listsHBox.setAlignment(Pos.CENTER);
+    	
+		listsHBox.getChildren().addAll(buildThermostatsEntry());
+		populateThermostatsEntry();
+		thermostats.setOnMouseClicked(new ThermostatsClickedEvent());
+		listsHBox.getChildren().addAll(buildSensorsEntry());
+		listsHBox.getChildren().addAll(buildDatesEntry());
+		listsHBox.getChildren().addAll(buildTimeAndTempEntry());
+		
+		vBox.getChildren().addAll(listsHBox);
+		vBox.getChildren().addAll(buildListsButtons());
+		
+		listsErrorOutput.setStyle("-fx-font-size: 12pt; -fx-font-weight: bold; " +
+                "-fx-text-fill: rgba(255, 0, 0, .75); -fx-padding: 10px;");
+		vBox.getChildren().addAll(listsErrorOutput);
+		
+		root.add(vBox, 0, 0);
+        
+        return root;
+    }
+    
+    private Pane buildListsButtons() {
+    	HBox buttonsHBox = new HBox();
+		buttonsHBox.setAlignment(Pos.CENTER);
+		
+        AnalysisHandler analysisHandler = new AnalysisHandler();
+        analysisBtn.setOnAction(analysisHandler);
+        analysisBtn.getStyleClass().add("button");
+        buttonsHBox.getChildren().addAll(analysisBtn);
+        
+        WipeSaveHandler wipeSaveHandler = new WipeSaveHandler();
+        wipeSaveBtn.setOnAction(wipeSaveHandler);
+        wipeSaveBtn.getStyleClass().add("button");
+        buttonsHBox.getChildren().addAll(wipeSaveBtn);
+        
+        LoadDataHandler loadDataHandler = new LoadDataHandler();
+        loadDataBtn.setOnAction(loadDataHandler);
+        loadDataBtn.getStyleClass().add("button");
+        buttonsHBox.getChildren().addAll(loadDataBtn, loadDataNameTxf);
+       
+        return buttonsHBox;
+    }
+    
+    private Pane buildAnalysisGui() {
+        GridPane root = new GridPane();
+        root.setAlignment(Pos.CENTER);
+        
+        root.add(buildAnalysisComingSoon(), 0, 0);
+        root.add(buildAnalysisButtons(), 0, 1);
+        
+        return root;
+    }
+    
+    private Pane buildAnalysisComingSoon() {
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.getStyleClass().add("h_or_v_box");
+        
+        Image comingSoonImage = new Image(getClass().getResourceAsStream("ComingSoon.png"));
+        ImageView imageView = new ImageView();
+        imageView.setImage(comingSoonImage);
+        
+        Label comingSoonLabel = new Label("Analysis, graphs, and more functionality will be added for problem two!", imageView);
+        comingSoonLabel.setContentDisplay(ContentDisplay.TOP);
+        
+        comingSoonLabel.setStyle("-fx-font-size: 15pt; -fx-font-weight: bold; " +
+                "-fx-text-fill: rgba(152, 255, 152, .50); -fx-padding: 10px;");
+        
+        vBox.getChildren().add(comingSoonLabel);
+        return vBox;
+    }
+    
+    private Pane buildAnalysisButtons() {
+    	HBox buttonsHBox = new HBox();
+		buttonsHBox.setAlignment(Pos.CENTER);
+        StorageHandler storageHandler = new StorageHandler();
+        storageBtn.setOnAction(storageHandler);
+        storageBtn.getStyleClass().add("button");
+        buttonsHBox.getChildren().addAll(storageBtn);
+        
+        return buttonsHBox;
+    }
 
     private class LoadSaveHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
+        	Label label = new Label("Unable to locate file: Please enter in the correct pathway.");
+        	label.setStyle("-fx-font-size: 8pt; -fx-font-weight: bold; " +
+                    "-fx-text-fill: rgba(152, 255, 152, .50); -fx-padding: 10px;");
+        	
         	try {
 				manager.loadSave(inputSaveNameTxf.getText());
+				saveFileName = inputSaveNameTxf.getText();
+				startErrorOutput.setText("");
 				Pane rootPane = buildListsGui();
 	            Scene scene = new Scene(rootPane, 1024, 768);
 	            scene.getStylesheets().add(getClass().getResource("application-styling.css").toExternalForm());
@@ -169,7 +238,7 @@ public class Main extends Application {
 	            mainStage.show();
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				startErrorOutput.setText("Unable to locate save file: Please enter in correct file name/location");
 			}
         }
     }
@@ -179,10 +248,45 @@ public class Main extends Application {
         public void handle(ActionEvent event) {
 			try {
 				manager.writeToSave(rawInputNameTxf.getText(), outputSaveNameTxf.getText());
+				startErrorOutput.setText("");
 			}
 			catch (IOException e) {
+				//e.printStackTrace();
+				startErrorOutput.setText("Unable to locate files: Please enter in correct file names/locations");
+			}
+        }
+    }
+    
+    private class WipeSaveHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+        	try {
+				manager.wipeSave(saveFileName);
+				thermostats.getItems().clear();
+				sensors.getItems().clear();
+				dates.getItems().clear();
+				timesAndTemps.getItems().clear();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
+        	
+        }
+    }
+    
+    private class LoadDataHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+        	//BUG: CALLED INDEX OUT OF BOUNDS ON WRITETOSAVE WITH MUTLIPLE TEXTFILES: CURRENTLY BROKEN
+        	//try {
+        		//manager.writeToSave(loadDataNameTxf.getText(), saveFileName);
+        		//manager.loadSave(saveFileName);
+				//populateThermostatsEntry();
+				//listsErrorOutput.setText("");
+			//} catch (IOException e) {
+				// TODO Auto-generated catch block
+			//}
+        	
+        	listsErrorOutput.setText("Currently broken... try again later lol");
         }
     }
     

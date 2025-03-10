@@ -145,5 +145,13 @@ public class ThermostatManager {
             }
         }
     }
+    
+    public void wipeSave(String saveFileName) throws IOException{
+    	File saveFile = new File(saveFileName);
+    	PrintWriter writer = new PrintWriter(saveFile);
+    	writer.print("");
+    	writer.close();
+    	thermostats.clear();
+    }
 
 }
