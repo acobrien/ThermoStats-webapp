@@ -1,11 +1,11 @@
 package org.datastructures.thermometernetwork;
 
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 
 public class Thermostat {
 
     private final String name;
-    private final TreeSet<Sensor> sensors = new TreeSet<>(new SensorComparator());
+    private final LinkedHashSet<Sensor> sensors = new LinkedHashSet<>();
 
     public Thermostat(String name) {
         this.name = name;
@@ -19,7 +19,7 @@ public class Thermostat {
         return sensors.add(sensor);
     }
 
-    public TreeSet<Sensor> getSensors() {
+    public LinkedHashSet<Sensor> getSensors() {
         return sensors;
     }
 
