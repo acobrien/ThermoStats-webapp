@@ -277,16 +277,15 @@ public class Main extends Application {
         @Override
         public void handle(ActionEvent event) {
         	//BUG: CALLED INDEX OUT OF BOUNDS ON WRITETOSAVE WITH MUTLIPLE TEXTFILES: CURRENTLY BROKEN
-        	//try {
-        		//manager.writeToSave(loadDataNameTxf.getText(), saveFileName);
-        		//manager.loadSave(saveFileName);
-				//populateThermostatsEntry();
-				//listsErrorOutput.setText("");
-			//} catch (IOException e) {
-				// TODO Auto-generated catch block
-			//}
+        	try {
+        		manager.writeToSave(loadDataNameTxf.getText(), saveFileName);
+        		manager.loadSave(saveFileName);
+				populateThermostatsEntry();
+				listsErrorOutput.setText("");
+			} catch (IOException e) {
+				listsErrorOutput.setText("Currently broken... try again later lol");
+			}
         	
-        	listsErrorOutput.setText("Currently broken... try again later lol");
         }
     }
     

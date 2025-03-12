@@ -67,7 +67,7 @@ public class ThermostatManager {
 
                     if (tokens[2].equals("0")) { // East Side
                         switch (i) { // Ignores inactive sensors on East thermostat
-                            case 4, 5, 6, 7, 8, 9, 11:
+                            case 6, 7, 8, 9, 10, 11, 13: // BUGGED
                                 out.print("," + tokens[i]);
                                 break;
                         }
@@ -75,7 +75,7 @@ public class ThermostatManager {
 
                     else if (tokens[2].equals("1")) { // West Side
                         switch (i) { // Ignores inactive sensors on West thermostat
-                            case 4, 5, 6, 7, 8, 11:
+                            case 6, 7, 8, 9, 10, 13:  //BUGGED
                                 out.print("," + tokens[i]);
                                 break;
                         }
