@@ -34,16 +34,16 @@ public class Main extends Application {
     private final TextField outputSaveNameTxf = new TextField("example-output-save.csv");
     private final TextField inputSaveNameTxf = new TextField("example-input-save.csv");
     private final TextField loadDataNameTxf = new TextField("example-input-save.csv");
-    private ListView<Sensor> sensors = new ListView<>();
-	private ListView<Thermostat> thermostats = new ListView<>();
-	private ListView<String> dates = new ListView<>();
-	private ListView<String> timesAndTemps = new ListView<>();
+    private final ListView<Sensor> sensors = new ListView<>();
+	private final ListView<Thermostat> thermostats = new ListView<>();
+	private final ListView<String> dates = new ListView<>();
+	private final ListView<String> timesAndTemps = new ListView<>();
 	private Thermostat currThermostat;
 	private Sensor currSensor;
 	private String currDate;
 	private String saveFileName = "";
-	private Label startErrorOutput = new Label();
-	private Label listsErrorOutput = new Label();
+	private final Label startErrorOutput = new Label();
+	private final Label listsErrorOutput = new Label();
 	private final Stage mainStage = new Stage();
 
     public static void main(String[] args) {
@@ -251,7 +251,6 @@ public class Main extends Application {
 				startErrorOutput.setText("");
 			}
 			catch (IOException e) {
-				//e.printStackTrace();
 				startErrorOutput.setText("Unable to locate files: Please enter in correct file names/locations");
 			}
         }
@@ -266,7 +265,8 @@ public class Main extends Application {
 				sensors.getItems().clear();
 				dates.getItems().clear();
 				timesAndTemps.getItems().clear();
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				e.printStackTrace();
 			}
         	
@@ -282,7 +282,8 @@ public class Main extends Application {
         		manager.loadSave(saveFileName);
 				populateThermostatsEntry();
 				listsErrorOutput.setText("");
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				listsErrorOutput.setText("Currently broken... try again later lol");
 			}
         	

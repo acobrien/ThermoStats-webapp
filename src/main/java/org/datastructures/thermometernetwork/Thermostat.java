@@ -1,21 +1,25 @@
 package org.datastructures.thermometernetwork;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 public class Thermostat {
 
     private final String name;
-    private final HashSet<Sensor> sensors = new HashSet<>();
+    private final TreeSet<Sensor> sensors = new TreeSet<>(new SensorComparator());
 
     public Thermostat(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean addSensor(Sensor sensor) {
         return sensors.add(sensor);
     }
 
-    public HashSet<Sensor> getSensors() {
+    public TreeSet<Sensor> getSensors() {
         return sensors;
     }
 
@@ -26,12 +30,7 @@ public class Thermostat {
 
     @Override
     public String toString() {
-    	//REMOVED TEMPORARILY: Unremoved temporarily:
-        StringBuilder msg = new StringBuilder("Thermostat: " + name + ", Sensors:\n");
-        for (Sensor sensor : sensors) {
-            msg.append(sensor.toString()).append("\n");
-        }
-        return msg + "\n";
+        return("Thermostat: " + name + "\n");
     }
 
 }

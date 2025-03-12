@@ -5,10 +5,14 @@ import java.util.*;
 public class Sensor {
 
     private final String sensorId;
-    private final TreeMap<String, LinkedHashMap<String, Double>> dateMap = new TreeMap<>(new DateComparator());
+    private final TreeMap<String, TreeMap<String, Double>> dateMap = new TreeMap<>(new DateComparator());
 
     public Sensor(String sensorId) {
         this.sensorId = sensorId;
+    }
+
+    public String getSensorId() {
+        return sensorId;
     }
 
     public void addTemperature(String timestamp, double temperature) {
@@ -18,17 +22,17 @@ public class Sensor {
             dateMap.get(date).put(time, temperature);
             return;
         }
-        dateMap.put(date, new LinkedHashMap<>());
+        dateMap.put(date, new TreeMap<>(new TimeComparator()));
     }
 
-    //Gets the LinkedHashMap of temps for the supplied date.
-    public LinkedHashMap<String, Double> getDayMap(String date) {
+    //Gets the TreeMap of temps for the supplied date.
+    public TreeMap<String, Double> getDayMap(String date) {
         return dateMap.get(date);
     }
     
     //Gets stringified list of temps in map ONLY FOR READABILITY
-    public LinkedHashSet<String> getDayTimesAndTemps(LinkedHashMap<String, Double> dayMap) {
-    	LinkedHashSet<String> dayTimesAndTemps = new LinkedHashSet<>();
+    public TreeSet<String> getDayTimesAndTemps(TreeMap<String, Double> dayMap) {
+    	TreeSet<String> dayTimesAndTemps = new TreeSet<>();
     	dayMap.forEach((key, value)  -> {
     		String combo = key + " : " + value;
     		dayTimesAndTemps.add(combo);
@@ -42,8 +46,7 @@ public class Sensor {
 
     @Override
     public String toString() {
-        //REMOVED TEMPORARILY nuh uh
-        return sensorId + ": " + dateMap;
+        return "Sensor: " + sensorId;
     }
 
 }

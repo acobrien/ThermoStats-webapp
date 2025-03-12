@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 
 public class ThermostatManager {
 
-    private final HashSet<Thermostat> thermostats = new HashSet<>();
+    private final TreeSet<Thermostat> thermostats = new TreeSet<>(new ThermostatComparator());
 
     public ThermostatManager() {
         // Intentionally empty
@@ -29,7 +29,7 @@ public class ThermostatManager {
         return thermostat.addSensor(sensor);
     }
     
-    public HashSet<Thermostat> getThermostats() {
+    public TreeSet<Thermostat> getThermostats() {
     	return thermostats;
     }
 
