@@ -11,10 +11,6 @@ public class Sensor {
         this.sensorId = sensorId;
     }
 
-    public String getSensorId() {
-        return sensorId;
-    }
-
     public void addTemperature(String timestamp, double temperature) {
         String date = timestamp.substring(0, 10);
         String time = timestamp.substring(11);

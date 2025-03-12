@@ -15,29 +15,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private static final ThermostatManager manager = new ThermostatManager();
-    private final Button loadSaveBtn = new Button("Load Save");
-    private final Button writeDataBtn = new Button("Write Data");
-    private final Button wipeSaveBtn = new Button("Wipe Save");
-    private final Button addDataBtn = new Button("Add Data");
-    private final Button analysisBtn = new Button("Analysis");
-    private final Button storageBtn = new Button("Storage");
-    private final TextField outerInputNameTxf = new TextField("example-input.txt");
-    private final TextField outputSaveNameTxf = new TextField("saveFile.csv");
-    private final TextField inputSaveNameTxf = new TextField("saveFile.csv");
-    private final TextField addDataNameTxf = new TextField("example-input.txt");
-    private final ListView<Sensor> sensors = new ListView<>();
-	private final ListView<Thermostat> thermostats = new ListView<>();
-	private final ListView<String> dates = new ListView<>();
-	private final ListView<String> timesAndTemps = new ListView<>();
-	private Thermostat currThermostat;
-	private Sensor currSensor;
-	private String currDate;
-	private String saveFileName = "";
-	private final Label startErrorOutput = new Label();
-	private final Label listsErrorOutput = new Label();
-	private final Stage mainStage = new Stage();
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -208,9 +185,88 @@ public class Main extends Application {
         storageBtn.setOnAction(storageHandler);
         storageBtn.getStyleClass().add("button");
         buttonsHBox.getChildren().addAll(storageBtn);
-        
+
         return buttonsHBox;
     }
+
+	private Pane buildThermostatsEntry() {
+		thermostats.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		thermostats.setPrefHeight(500);
+		thermostats.setPrefWidth(250);
+		VBox vBox = new VBox();
+		vBox.getStyleClass().add("h_or_v_box");
+		Label lbl = new Label("Thermostats\nFormat: ID");
+		lbl.getStyleClass().add("label");
+		vBox.getChildren().add(lbl);
+		vBox.getChildren().addAll(thermostats);
+		return vBox;
+	}
+
+	private Pane buildSensorsEntry() {
+		sensors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		sensors.setPrefHeight(500);
+		sensors.setPrefWidth(250);
+		VBox vBox = new VBox();
+		vBox.getStyleClass().add("h_or_v_box");
+		Label lbl = new Label("Sensors\nFormat: ID");
+		lbl.getStyleClass().add("label");
+		vBox.getChildren().add(lbl);
+		vBox.getChildren().addAll(sensors);
+		return vBox;
+	}
+
+	private Pane buildDatesEntry() {
+		dates.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		dates.setPrefHeight(500);
+		dates.setPrefWidth(250);
+		VBox vBox = new VBox();
+		vBox.getStyleClass().add("h_or_v_box");
+		Label lbl = new Label("Dates\nFormat: Date");
+		lbl.getStyleClass().add("label");
+		vBox.getChildren().add(lbl);
+		vBox.getChildren().add(dates);
+		return vBox;
+	}
+
+	private Pane buildTimeAndTempEntry() {
+		timesAndTemps.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		timesAndTemps.setPrefHeight(500);
+		timesAndTemps.setPrefWidth(250);
+		VBox vBox = new VBox();
+		vBox.getStyleClass().add("h_or_v_box");
+		Label lbl = new Label("Time and Temp\nFormat: Time : Temp");
+		lbl.getStyleClass().add("label");
+		vBox.getChildren().add(lbl);
+		vBox.getChildren().add(timesAndTemps);
+		return vBox;
+	}
+
+	private void populateThermostatsEntry() {
+		thermostats.getItems().clear();
+		thermostats.getItems().addAll(manager.getThermostats());
+	}
+
+	private void populateSensorsEntry(Thermostat thermostat) {
+		sensors.getItems().clear();
+		sensors.getItems().addAll(thermostat.getSensors());
+		sensors.setOnMouseClicked(new SensorsClickedEvent());
+	}
+
+	private void populateDatesEntry(Sensor sensor) {
+		dates.getItems().clear();
+		if (sensor != null) {
+			dates.getItems().addAll(sensor.getDates());
+		}
+		dates.setOnMouseClicked(new DatesClickedEvent());
+	}
+
+	private void populateTimeAndTempsEntry(Sensor sensor, String date) {
+		timesAndTemps.getItems().clear();
+		if (sensor != null) {
+			timesAndTemps.getItems().addAll(sensor.getDayTimesAndTemps(sensor.getDayMap(date)));
+		}
+		dates.setOnMouseClicked(new DatesClickedEvent());
+	}
 
     private class LoadSaveHandler implements EventHandler<ActionEvent> {
         @Override
@@ -259,16 +315,14 @@ public class Main extends Application {
 				timesAndTemps.getItems().clear();
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				listsErrorOutput.setText("Error wiping save.");
 			}
-        	
         }
     }
     
     private class AddDataHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-        	//BUG: CALLED INDEX OUT OF BOUNDS ON WRITETOSAVE WITH MUTLIPLE TEXTFILES: CURRENTLY BROKEN
         	try {
         		manager.writeToSave(addDataNameTxf.getText(), saveFileName);
         		manager.loadSave(saveFileName);
@@ -276,9 +330,8 @@ public class Main extends Application {
 				listsErrorOutput.setText("");
 			}
 			catch (IOException e) {
-				listsErrorOutput.setText("Currently broken... try again later lol");
+				listsErrorOutput.setText("Error adding data.");
 			}
-        	
         }
     }
     
@@ -304,88 +357,7 @@ public class Main extends Application {
         }
     }
     
-    private Pane buildThermostatsEntry() {
-		thermostats.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		thermostats.setPrefHeight(500);
-		thermostats.setPrefWidth(250);
-		VBox vBox = new VBox();
-		vBox.getStyleClass().add("h_or_v_box");
-		Label lbl = new Label("Thermostats\nFormat: ID");
-		lbl.getStyleClass().add("label");
-		vBox.getChildren().add(lbl);
-		vBox.getChildren().addAll(thermostats);
-		return vBox;
-	}
-	
-	private Pane buildSensorsEntry() {
-		sensors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		sensors.setPrefHeight(500);
-		sensors.setPrefWidth(250);
-		VBox vBox = new VBox();
-		vBox.getStyleClass().add("h_or_v_box");
-		Label lbl = new Label("Sensors\nFormat: ID");
-		lbl.getStyleClass().add("label");
-		vBox.getChildren().add(lbl);
-		vBox.getChildren().addAll(sensors);
-		return vBox;
-	}
-	
-	private Pane buildDatesEntry() {
-		dates.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		dates.setPrefHeight(500);
-		dates.setPrefWidth(250);
-		VBox vBox = new VBox();
-		vBox.getStyleClass().add("h_or_v_box");
-		Label lbl = new Label("Dates\nFormat: Date");
-		lbl.getStyleClass().add("label");
-		vBox.getChildren().add(lbl);
-		vBox.getChildren().add(dates);
-		return vBox;
-	}
-	
-	private Pane buildTimeAndTempEntry() {
-		timesAndTemps.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		timesAndTemps.setPrefHeight(500);
-		timesAndTemps.setPrefWidth(250);
-		VBox vBox = new VBox();
-		vBox.getStyleClass().add("h_or_v_box");
-		Label lbl = new Label("Time and Temp\nFormat: Time : Temp");
-		lbl.getStyleClass().add("label");
-		vBox.getChildren().add(lbl);
-		vBox.getChildren().add(timesAndTemps);
-		return vBox;
-	}
-	
-	private void populateThermostatsEntry() {
-		thermostats.getItems().clear();
-		thermostats.getItems().addAll(manager.getThermostats());
-	}
-	
-	private void populateSensorsEntry(Thermostat t) {
-		sensors.getItems().clear();
-		sensors.getItems().addAll(t.getSensors());
-		sensors.setOnMouseClicked(new SensorsClickedEvent());
-		
-	}
-	
-	private void populateDatesEntry(Sensor s) {
-		dates.getItems().clear();
-		if (s != null) {
-			dates.getItems().addAll(s.getDates());
-		}
-		dates.setOnMouseClicked(new DatesClickedEvent());
-	}
-	
-	private void populateTimeAndTempsEntry(Sensor s, String date) {
-		timesAndTemps.getItems().clear();
-		if (s != null) {
-			timesAndTemps.getItems().addAll(s.getDayTimesAndTemps(s.getDayMap(date)));
-		}
-		dates.setOnMouseClicked(new DatesClickedEvent());
-	}
-    
     public class ThermostatsClickedEvent implements EventHandler<MouseEvent> {
-
 		@Override
 		public void handle(MouseEvent event) {
 			currThermostat = thermostats.getSelectionModel().getSelectedItem();
@@ -398,7 +370,6 @@ public class Main extends Application {
 	}
 	
 	public class SensorsClickedEvent implements EventHandler<MouseEvent> {
-
 		@Override
 		public void handle(MouseEvent event) {
 			currSensor = sensors.getSelectionModel().getSelectedItem();
@@ -410,14 +381,35 @@ public class Main extends Application {
 	}
 	
 	public class DatesClickedEvent implements EventHandler<MouseEvent> {
-
 		@Override
 		public void handle(MouseEvent event) {
-			currDate = dates.getSelectionModel().getSelectedItem();
+            String currDate = dates.getSelectionModel().getSelectedItem();
 			if (currThermostat != null && currSensor !=  null && currDate != null) {
 				populateTimeAndTempsEntry(currSensor, currDate);
 			}
 		}
 	}
+
+	private static final ThermostatManager manager = new ThermostatManager();
+	private final Button loadSaveBtn = new Button("Load Save");
+	private final Button writeDataBtn = new Button("Write Data");
+	private final Button wipeSaveBtn = new Button("Wipe Save");
+	private final Button addDataBtn = new Button("Add Data");
+	private final Button analysisBtn = new Button("Analysis");
+	private final Button storageBtn = new Button("Storage");
+	private final TextField outerInputNameTxf = new TextField("example-input.txt");
+	private final TextField outputSaveNameTxf = new TextField("saveFile.csv");
+	private final TextField inputSaveNameTxf = new TextField("saveFile.csv");
+	private final TextField addDataNameTxf = new TextField("example-input.txt");
+	private final ListView<Sensor> sensors = new ListView<>();
+	private final ListView<Thermostat> thermostats = new ListView<>();
+	private final ListView<String> dates = new ListView<>();
+	private final ListView<String> timesAndTemps = new ListView<>();
+	private Thermostat currThermostat;
+	private Sensor currSensor;
+    private String saveFileName;
+	private final Label startErrorOutput = new Label();
+	private final Label listsErrorOutput = new Label();
+	private final Stage mainStage = new Stage();
 
 }

@@ -30,7 +30,7 @@ public class Thermostat {
 
     @Override
     public String toString() {
-        return("Thermostat: " + name + "\n");
+        return name;
     }
 
 }
