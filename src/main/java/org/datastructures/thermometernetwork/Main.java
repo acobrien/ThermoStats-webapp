@@ -1,24 +1,16 @@
 package org.datastructures.thermometernetwork;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -27,13 +19,13 @@ public class Main extends Application {
     private final Button loadSaveBtn = new Button("Load Save");
     private final Button writeDataBtn = new Button("Write Data");
     private final Button wipeSaveBtn = new Button("Wipe Save");
-    private final Button loadDataBtn = new Button("Add Data");
+    private final Button addDataBtn = new Button("Add Data");
     private final Button analysisBtn = new Button("Analysis");
     private final Button storageBtn = new Button("Storage");
-    private final TextField rawInputNameTxf = new TextField("example-input.txt");
-    private final TextField outputSaveNameTxf = new TextField("example-output-save.csv");
-    private final TextField inputSaveNameTxf = new TextField("example-input-save.csv");
-    private final TextField loadDataNameTxf = new TextField("example-input-save.csv");
+    private final TextField outerInputNameTxf = new TextField("example-input.txt");
+    private final TextField outputSaveNameTxf = new TextField("saveFile.csv");
+    private final TextField inputSaveNameTxf = new TextField("saveFile.csv");
+    private final TextField addDataNameTxf = new TextField("example-input.txt");
     private final ListView<Sensor> sensors = new ListView<>();
 	private final ListView<Thermostat> thermostats = new ListView<>();
 	private final ListView<String> dates = new ListView<>();
@@ -121,7 +113,7 @@ public class Main extends Application {
         WriteDataHandler writeDataHandler = new WriteDataHandler();
         writeDataBtn.setOnAction(writeDataHandler);
         writeDataBtn.getStyleClass().add("button");
-        writeDataHBox.getChildren().addAll(writeDataBtn, rawInputNameTxf, outputSaveNameTxf);
+        writeDataHBox.getChildren().addAll(writeDataBtn, outerInputNameTxf, outputSaveNameTxf);
 
         vBox.getChildren().addAll(loadSaveHBox, writeDataHBox);
         return vBox;
@@ -172,10 +164,10 @@ public class Main extends Application {
         wipeSaveBtn.getStyleClass().add("button");
         buttonsHBox.getChildren().addAll(wipeSaveBtn);
         
-        LoadDataHandler loadDataHandler = new LoadDataHandler();
-        loadDataBtn.setOnAction(loadDataHandler);
-        loadDataBtn.getStyleClass().add("button");
-        buttonsHBox.getChildren().addAll(loadDataBtn, loadDataNameTxf);
+        AddDataHandler addDataHandler = new AddDataHandler();
+        addDataBtn.setOnAction(addDataHandler);
+        addDataBtn.getStyleClass().add("button");
+        buttonsHBox.getChildren().addAll(addDataBtn, addDataNameTxf);
        
         return buttonsHBox;
     }
@@ -247,11 +239,11 @@ public class Main extends Application {
         @Override
         public void handle(ActionEvent event) {
 			try {
-				manager.writeToSave(rawInputNameTxf.getText(), outputSaveNameTxf.getText());
+				manager.writeToSave(outerInputNameTxf.getText(), outputSaveNameTxf.getText());
 				startErrorOutput.setText("");
 			}
 			catch (IOException e) {
-				startErrorOutput.setText("Unable to locate files: Please enter in correct file names/locations");
+				startErrorOutput.setText("Unable to locate files: Please enter correct file names/locations");
 			}
         }
     }
@@ -273,12 +265,12 @@ public class Main extends Application {
         }
     }
     
-    private class LoadDataHandler implements EventHandler<ActionEvent> {
+    private class AddDataHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
         	//BUG: CALLED INDEX OUT OF BOUNDS ON WRITETOSAVE WITH MUTLIPLE TEXTFILES: CURRENTLY BROKEN
         	try {
-        		manager.writeToSave(loadDataNameTxf.getText(), saveFileName);
+        		manager.writeToSave(addDataNameTxf.getText(), saveFileName);
         		manager.loadSave(saveFileName);
 				populateThermostatsEntry();
 				listsErrorOutput.setText("");
