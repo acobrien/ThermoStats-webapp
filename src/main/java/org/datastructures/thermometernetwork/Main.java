@@ -327,6 +327,9 @@ public class Main extends Application {
         		manager.writeToSave(addDataNameTxf.getText(), saveFileName);
         		manager.loadSave(saveFileName);
 				populateThermostatsEntry();
+				sensors.getItems().clear();
+				dates.getItems().clear();
+				timesAndTemps.getItems().clear();
 				listsErrorOutput.setText("");
 			}
 			catch (IOException e) {
