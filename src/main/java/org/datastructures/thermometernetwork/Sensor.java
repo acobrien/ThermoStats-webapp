@@ -42,8 +42,8 @@ public class Sensor {
 
     @Override
     public String toString() {
-        return sensorId;
-        //REMOVED TEMPORARILY: ": " + dateMap.toString()
+        //REMOVED TEMPORARILY nuh uh
+        return sensorId + ": " + dateMap;
     }
 
 }
