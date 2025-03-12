@@ -11,6 +11,15 @@ public class Sensor {
         this.sensorId = sensorId;
     }
 
+    public Set<String> getDates(){
+        return dateMap.keySet();
+    }
+
+    //Gets the TreeMap of temps for the supplied date
+    public TreeMap<String, Double> getDayMap(String date) {
+        return dateMap.get(date);
+    }
+
     public void addTemperature(String timestamp, double temperature) {
         String date = timestamp.substring(0, 10);
         String time = timestamp.substring(11);
@@ -21,28 +30,19 @@ public class Sensor {
         dateMap.put(date, new TreeMap<>(new TimeComparator()));
     }
 
-    //Gets the TreeMap of temps for the supplied date.
-    public TreeMap<String, Double> getDayMap(String date) {
-        return dateMap.get(date);
-    }
-    
-    //Gets stringified list of temps in map ONLY FOR READABILITY
+    //Builds a set of Strings "time : temp" from dayMap
     public TreeSet<String> getDayTimesAndTemps(TreeMap<String, Double> dayMap) {
-    	TreeSet<String> dayTimesAndTemps = new TreeSet<>();
-    	dayMap.forEach((key, value)  -> {
-    		String combo = key + " : " + value;
-    		dayTimesAndTemps.add(combo);
-    	});
-    	return dayTimesAndTemps;  
-    }
-    
-    public Set<String> getDates(){
-    	return dateMap.keySet();
+        TreeSet<String> dayTimesAndTemps = new TreeSet<>();
+        dayMap.forEach((key, value)  -> {
+            String combo = key + " : " + value;
+            dayTimesAndTemps.add(combo);
+        });
+        return dayTimesAndTemps;
     }
 
     @Override
     public String toString() {
-        return "Sensor: " + sensorId;
+        return sensorId;
     }
 
 }

@@ -195,7 +195,7 @@ public class Main extends Application {
 		thermostats.setPrefWidth(250);
 		VBox vBox = new VBox();
 		vBox.getStyleClass().add("h_or_v_box");
-		Label lbl = new Label("Thermostats\nFormat: ID");
+		Label lbl = new Label("Thermostats");
 		lbl.getStyleClass().add("label");
 		vBox.getChildren().add(lbl);
 		vBox.getChildren().addAll(thermostats);
@@ -208,7 +208,7 @@ public class Main extends Application {
 		sensors.setPrefWidth(250);
 		VBox vBox = new VBox();
 		vBox.getStyleClass().add("h_or_v_box");
-		Label lbl = new Label("Sensors\nFormat: ID");
+		Label lbl = new Label("Sensors");
 		lbl.getStyleClass().add("label");
 		vBox.getChildren().add(lbl);
 		vBox.getChildren().addAll(sensors);
@@ -221,7 +221,7 @@ public class Main extends Application {
 		dates.setPrefWidth(250);
 		VBox vBox = new VBox();
 		vBox.getStyleClass().add("h_or_v_box");
-		Label lbl = new Label("Dates\nFormat: Date");
+		Label lbl = new Label("Dates");
 		lbl.getStyleClass().add("label");
 		vBox.getChildren().add(lbl);
 		vBox.getChildren().add(dates);
@@ -234,7 +234,7 @@ public class Main extends Application {
 		timesAndTemps.setPrefWidth(250);
 		VBox vBox = new VBox();
 		vBox.getStyleClass().add("h_or_v_box");
-		Label lbl = new Label("Time and Temp\nFormat: Time : Temp");
+		Label lbl = new Label("Time & Temp");
 		lbl.getStyleClass().add("label");
 		vBox.getChildren().add(lbl);
 		vBox.getChildren().add(timesAndTemps);
@@ -391,6 +391,10 @@ public class Main extends Application {
 	}
 
 	private static final ThermostatManager manager = new ThermostatManager();
+	private Thermostat currThermostat;
+	private Sensor currSensor;
+	private String saveFileName;
+
 	private final Button loadSaveBtn = new Button("Load Save");
 	private final Button writeDataBtn = new Button("Write Data");
 	private final Button wipeSaveBtn = new Button("Wipe Save");
@@ -405,9 +409,6 @@ public class Main extends Application {
 	private final ListView<Thermostat> thermostats = new ListView<>();
 	private final ListView<String> dates = new ListView<>();
 	private final ListView<String> timesAndTemps = new ListView<>();
-	private Thermostat currThermostat;
-	private Sensor currSensor;
-    private String saveFileName;
 	private final Label startErrorOutput = new Label();
 	private final Label listsErrorOutput = new Label();
 	private final Stage mainStage = new Stage();

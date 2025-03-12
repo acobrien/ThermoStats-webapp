@@ -12,15 +12,6 @@ public class ThermostatManager {
         // Intentionally empty
     }
 
-    @Override
-    public String toString() {
-        StringBuilder msg = new StringBuilder();
-        for (Thermostat thermostat : thermostats) {
-            msg.append(thermostat.toString());
-        }
-        return msg.toString();
-    }
-
     public boolean addThermostat(Thermostat thermostat) {
         return thermostats.add(thermostat);
     }
@@ -28,9 +19,9 @@ public class ThermostatManager {
     public boolean addSensor(Thermostat thermostat, Sensor sensor) {
         return thermostat.addSensor(sensor);
     }
-    
+
     public TreeSet<Thermostat> getThermostats() {
-    	return thermostats;
+        return thermostats;
     }
 
     // Only method that should have to change for compatibility with other systems
@@ -137,7 +128,7 @@ public class ThermostatManager {
                     timestamp = tokens[0];
                     for (Thermostat thermostat : thermostats) {
                         for (Sensor sensor : thermostat.getSensors()) {
-                            thermostat.addEntry(sensor, timestamp, Double.parseDouble(tokens[temperatureIndex]));
+                            thermostat.addTemperature(sensor, timestamp, Double.parseDouble(tokens[temperatureIndex]));
                             temperatureIndex++;
                         }
                     }
@@ -152,6 +143,15 @@ public class ThermostatManager {
     	writer.print("");
     	writer.close();
     	thermostats.clear();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder msg = new StringBuilder();
+        for (Thermostat thermostat : thermostats) {
+            msg.append(thermostat.toString());
+        }
+        return msg.toString();
     }
 
 }
