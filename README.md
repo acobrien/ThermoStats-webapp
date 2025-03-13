@@ -1,8 +1,10 @@
 To Run:
 
+cd backend
+
 venv\Scripts\activate
 
-cd backend
+pip install fastapi uvicorn
 
 uvicorn main:app --reload
 
