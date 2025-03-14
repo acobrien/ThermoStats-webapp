@@ -2,7 +2,7 @@ To Run:
 
 Install Python: https://www.python.org/downloads/release/python-3132/
 
-Install Node.js: https://nodejs.org/
+Install Node.js (CLICK ADD TO PATH IN INSTALLER): https://nodejs.org/
 
 cd backend
 
