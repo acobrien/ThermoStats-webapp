@@ -4,6 +4,8 @@ Install Python: https://www.python.org/downloads/release/python-3132/
 
 Install Node.js (CLICK ADD TO PATH IN INSTALLER): https://nodejs.org/
 
+RUN EDITOR IN ADMINISTRATOR MODE
+
 cd backend
 
 (first time only) py -m venv venv
