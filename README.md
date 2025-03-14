@@ -2,6 +2,8 @@ To Run:
 
 cd backend
 
+(first time only) py -m venv venv
+
 venv\Scripts\activate
 
 pip install fastapi uvicorn
