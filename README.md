@@ -20,7 +20,7 @@ Visit http://localhost:8000
 
 cd frontend
 
-(first time only if not already done with frontend setup) npm install 
+(first time only) npm install 
 
 npm run serve
 
