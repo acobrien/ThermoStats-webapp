@@ -1,0 +1,198 @@
+:root {
+    /* Dark theme color variables */
+    --dark-bg: #121212;
+    --dark-text: #e0e0e0;
+    --dark-primary: #bb86fc;
+    --dark-primary-variant: #3700b3;
+    --dark-secondary: #03dac6;
+    --dark-error: #cf6679;
+    --dark-surface: #1e1e1e;
+    --dark-success: #4caf50;
+    --dark-warning: #ff9800;
+    --dark-info: #2196f3;
+}
+
+/* Base styles */
+body {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 1rem;
+}
+
+/* Links */
+a {
+    color: var(--dark-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--dark-secondary);
+    text-decoration: underline;
+}
+
+a:visited {
+    color: var(--dark-primary-variant);
+}
+
+/* Buttons */
+button {
+    background-color: var(--dark-primary);
+    color: var(--dark-bg);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button.secondary {
+    background-color: transparent;
+    color: var(--dark-primary);
+    border: 1px solid var(--dark-primary);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Forms */
+input,
+textarea,
+select {
+    background-color: var(--dark-surface);
+    color: var(--dark-text);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin: 0.25rem 0;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--dark-primary);
+    box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.2);
+}
+
+label {
+    color: rgba(255, 255, 255, 0.8);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Cards */
+.card {
+    background-color: var(--dark-surface);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+th, td {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem;
+    text-align: left;
+}
+
+th {
+    background-color: var(--dark-surface);
+    color: var(--dark-primary);
+}
+
+tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Code blocks */
+pre, code {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: var(--dark-secondary);
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+pre {
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+/* Utility classes */
+.text-primary {
+    color: var(--dark-primary);
+}
+
+.text-secondary {
+    color: var(--dark-secondary);
+}
+
+.text-success {
+    color: var(--dark-success);
+}
+
+.text-warning {
+    color: var(--dark-warning);
+}
+
+.text-error {
+    color: var(--dark-error);
+}
+
+.text-info {
+    color: var(--dark-info);
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-surface);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dark-primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-primary-variant);
+}
