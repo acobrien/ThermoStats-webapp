@@ -10,7 +10,7 @@ cd backend
 
 venv\Scripts\activate
 
-pip install fastapi uvicorn
+(first time only) pip install fastapi uvicorn
 
 uvicorn main:app --reload
 
@@ -19,6 +19,8 @@ Visit http://localhost:8000
 (only if in the backend folder in terminal) cd ..
 
 cd frontend
+
+(first time only if not already done with frontend setup) npm install 
 
 npm run serve
 
