@@ -10,7 +10,7 @@ cd backend
 
 venv\Scripts\activate
 
-pip install fastapi uvicorn
+pip install
 
 uvicorn main:app --reload
 
