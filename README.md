@@ -1,5 +1,9 @@
 To Run:
 
+Install Python: https://www.python.org/downloads/release/python-3132/
+
+Install Node.js: https://nodejs.org/
+
 cd backend
 
 (first time only) py -m venv venv
