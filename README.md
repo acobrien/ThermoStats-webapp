@@ -10,13 +10,13 @@ cd backend
 
 venv\Scripts\activate
 
-pip install
+pip install fastapi uvicorn
 
 uvicorn main:app --reload
 
 Visit http://localhost:8000
 
-cd ..
+(only if in the backend folder in terminal) cd ..
 
 cd frontend
 
