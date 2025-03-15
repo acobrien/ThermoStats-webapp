@@ -22,7 +22,9 @@ Visit http://localhost:8000
 
 cd frontend
 
-(first time only) npm install 
+(first time only) npm install
+
+(first time only) npm install vue-router
 
 npm run serve
 
