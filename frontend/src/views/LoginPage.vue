@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
     <h1>ThermoStats Login</h1>
     <form @submit.prevent="handleSubmit">
       <div>
@@ -26,3 +27,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.logo {
+  display: block;
+  align-content: center;
+  max-width: 50%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
