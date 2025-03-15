@@ -14,6 +14,9 @@ venv\Scripts\activate
 
 (first time only) pip install fastapi uvicorn
 
+NECESSARY python libraries:
+    none for now
+
 uvicorn main:app --reload
 
 Visit http://localhost:8000
