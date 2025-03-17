@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from Sensor import Sensor
+from sensor import Sensor
 
 app = FastAPI()
 

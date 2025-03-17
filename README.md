@@ -15,7 +15,7 @@ venv\Scripts\activate
 (first time only) pip install fastapi uvicorn
 
 NECESSARY python libraries:
-    none for now
+    pip install ordered_set
 
 uvicorn main:app --reload
 
