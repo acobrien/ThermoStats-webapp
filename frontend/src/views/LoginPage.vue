@@ -1,20 +1,22 @@
 <template>
-  <div class="login">
-    <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
-    <h1>ThermoStats Login</h1>
-    <form @submit.prevent="handleSubmit">
-      <div>
-        <label>Username:</label>
-        <input type="text" v-model="username">
-      </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" v-model="password">
-      </div>
-      <button type="submit">Login</button>
-    </form>
-    <p v-if="statusMessage">{{ statusMessage }}</p>
-    <router-link to="/">Back to Home</router-link>
+  <div class="page">
+    <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo"/>
+    <div>
+      <h1>ThermoStats Login</h1>
+      <form @submit.prevent="handleSubmit" class="login-form">
+        <div>
+          <label>Username</label>
+          <input type="text" v-model="username">
+        </div>
+        <div>
+          <label>Password </label>
+          <input type="password" v-model="password">
+        </div>
+        <button type="submit">Login</button>
+      </form>
+      <p v-if="statusMessage">{{ statusMessage }}</p>
+      <router-link to="/">Back to Home</router-link>
+    </div>
   </div>
 </template>
 
@@ -41,7 +43,7 @@ export default {
           }
         });
 
-        // Store the token
+        // Store the token if API request is successful
         localStorage.setItem('auth_token', response.data.access_token);
 
         // Redirect to dashboard
@@ -63,5 +65,11 @@ export default {
   height: auto;
   margin-left: auto;
   margin-right: auto;
+}
+.login-form div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 10px 0;
 }
 </style>
