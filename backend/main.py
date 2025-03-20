@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from thermostat_manager import ThermostatManager
 
 app = FastAPI()
 
