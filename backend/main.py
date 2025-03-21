@@ -12,5 +12,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve files directly from /data
+# Makes files in /data available
 app.mount("/data", StaticFiles(directory="data"), name="data")
