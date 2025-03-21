@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from thermostat_manager import ThermostatManager
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-# Enable CORS (for development only!)
+# Enable CORS for local development
+from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,6 +12,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def read_root():
-    return {"message": "Backend is running!"}
+# Serve files directly from /data
+app.mount("/data", StaticFiles(directory="data"), name="data")
