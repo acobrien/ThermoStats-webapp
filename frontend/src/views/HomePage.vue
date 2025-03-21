@@ -2,15 +2,15 @@
 <div class="home">
   <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
   <h1>ThermoStats Home</h1>
-  <button @click="navigateToLogin">Sign In</button>
+  <button @click="navigateToDashboard">Dashboard</button>
 </div>
 </template>
 
 <script>
 export default {
   methods: {
-    navigateToLogin() {
-      this.$router.push('/login')
+    navigateToDashboard() {
+      this.$router.push('/dashboard');
     }
   }
 }
