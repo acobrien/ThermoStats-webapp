@@ -5,7 +5,7 @@ class Sensor:
     
     def __init__(self, sensorID):
         self.sensorID = sensorID
-        self.dateMap = OrderedDict
+        self.dateMap = OrderedDict()
     
     def addTemperature(self, timestamp, temperature):
         date = timestamp[0, 10]
@@ -15,8 +15,7 @@ class Sensor:
             return
         self.dateMap[date] = {}
 
-    #POTENTIAL BUG: might not be in order, might need to be sorted before returning
-    def getTimesAndTemps(self, dayMap):
+    def getDayTimesAndTemps(self, dayMap):
         timesAndTemps = OrderedSet()
 
         for time in dayMap:
@@ -25,10 +24,11 @@ class Sensor:
 
         return timesAndTemps
 
-    #testing method
-    def displayTemperatures(self):
-        for date in self.dateMap.keys:
-            print(self.getTimesAndTemps(self.dateMap.get(date)))
+    def getAllTimesAndTemps(self):
+        dateString = ""
+        for date in self.dateMap.keys():
+            dateString += str(self.getDayTimesAndTemps(self.dateMap.get(date))) + "\n"
+        return dateString
 
     def getDates(self):
         return self.dateMap.keys
@@ -37,4 +37,8 @@ class Sensor:
         return self.dateMap.get(date)
     
     def __str__(self):
-        return f"Sensor(ID: {self.sensorID})"
+        toString = f"Sensor(ID: {self.sensorID})"
+        toString += self.getAllTimesAndTemps()
+        return toString
+
+        

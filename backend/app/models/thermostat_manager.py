@@ -1,11 +1,8 @@
 from thermostat import Thermostat
 from sensor import Sensor
 from ordered_set import OrderedSet
-from collections import OrderedDict
-from datetime import date
-import os
-from datetime import datetime
 import re
+from time import strftime, localtime
 
 class ThermostatManager:
 
@@ -57,8 +54,7 @@ class ThermostatManager:
 
 
     def epochToDateTime(self, epochTimestamp):
-        dt_object = datetime.utcfromtimestamp(float(epochTimestamp))
-        formatted_time = dt_object.strftime('%m/%d/%y-%H:%M:%S')
+        formatted_time = strftime('%m/%d/%Y-%H:%M:%S', localtime(float(epochTimestamp)))
         return formatted_time
     
     def loadSave(self, saveFileName):
