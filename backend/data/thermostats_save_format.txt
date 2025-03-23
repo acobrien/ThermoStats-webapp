@@ -1,0 +1,40 @@
+Filename: Date
+Field 1: Time
+Field 2: Epoch
+Field 3: Thermostat (0 or 1)
+Field 4: State
+	Idle = 0
+	Heating = 1
+	Cooling = 2
+	Lockout = 3
+	Error = 4
+	Airwave = 5
+	Offline = 6
+Field 5: Stage
+	Stage 1 (Heating / Cooling)
+	Stage 2 (Emergency Heat)
+Fields 6-16: Sensors
+Thermostat 0 - East Side
+	Sensor 0: HVAC Intake
+	Sensor 1: Master Bedroom
+	Sensor 2: Master Bathroom
+	Sensor 3: Office
+	Sensor 4: Ty's Bedroom
+	Sensor 5: Luke's Bedroom
+	Sensor 6: Sabry's Bedroom
+	Sensor 7: Expansion (not in use)
+	Sensor 8: Living Room
+	Sensor 9: HVAC Supply
+	Sensor 10: Average of 1,2,3,4,5,6,&8
+Thermostat 1 - West Side
+	Sensor 0: HVAC Intake
+	Sensor 1: Brody's Bedroom
+	Sensor 2: Kitchen
+	Sensor 3: Den
+	Sensor 4: Bar
+	Sensor 5: Living Room
+	Sensor 6: Expansion (not in use)
+	Sensor 7: Expansion (not in use)
+	Sensor 8: Outside
+	Sensor 9: HVAC Supply
+	Sensor 10: Average of 1,2,3,4,&5

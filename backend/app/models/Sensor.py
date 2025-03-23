@@ -37,4 +37,4 @@ class Sensor:
         return self.dateMap.get(date)
     
     def __str__(self):
-        return self.sensorID
+        return f"Sensor(ID: {self.sensorID})"

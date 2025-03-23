@@ -6,12 +6,23 @@ class Thermostat:
         self.thermostatID = thermostatID
         self.sensors = OrderedSet()
 
+        if self.thermostatID == "0":
+            self.sensorKeys = OrderedSet(["Master Bedroom","Master Bathroom","Office",
+                        "Ty's Bedroom","Luke's Bedroom","Sabry's Bedroom","Living Room"])
+        elif self.thermostatID == "1":
+            self.sensorKeys = OrderedSet(["Brody's Bedroom","Kitchen","Den","Bar","Living Room","Outside"])
+        else:
+            self.sensorKeys = OrderedSet()
+
     def addSensor(self, sensor):
-        self.sensors.add(sensor)
+        if sensor not in self.sensors:
+            self.sensors.add(sensor)
 
     def addTemperature(self, sensor, timestamp, temperature):
-        sensor.addTemperature(timestamp, temperature)
-        return True
+        if sensor in self.sensors:
+            sensor.addTemperature(timestamp, temperature)
+            return True
+        return False
 
     def getSensors(self):
         return self.sensors
@@ -20,4 +31,7 @@ class Thermostat:
         return self.thermostatID
 
     def __str__(self):
-        return self.thermostatID
+        toString = f"Thermostat(ID: {self.thermostatID})\n"
+        for sensor in self.sensors:
+            toString += str(sensor)
+        return toString

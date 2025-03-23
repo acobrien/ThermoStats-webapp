@@ -13,115 +13,91 @@ class ThermostatManager:
         self.thermostats = OrderedSet()
     
     def addThermostat(self, thermostat):
-        return self.thermostats.add(thermostat)
+        self.thermostats.add(thermostat)
     
     def addSensor(self, thermostat, sensor):
-        return thermostat.addSensor(sensor)
+        thermostat.addSensor(sensor)
     
     def getThermostats(self):
         return self.thermostats
     
     def writeToSave(self, inFileName, saveFileName): 
         try:
-            inFile = open(inFileName, "r")
             saveFile = open(saveFileName, "w")
             even = True
-
-            fileSize = os.path.getsize(saveFileName)
             
-            if fileSize == 0:
-                saveFile.write("East Side,Master Bedroom,Master Bathroom,Office," +
-                        "Ty's Bedroom,Luke's Bedroom,Sabry's Bedroom,Living Room\n" +
-                        "West Side,Brody's Bedroom,Kitchen,Den,Bar,Living Room,Outside")
-            
-            line = inFile.readline()
-            tokens = line.split("[\t ]+")
+            with open(inFileName, "r") as file:
+                for line in file:
+                    tokens = re.split(r"\t+", line)
+                    tokensLength = len(tokens)
 
-            if even:
-                saveFile.write(self.epochToDateTime(tokens[1]))
+                    if even:
+                        saveFile.write(str(self.epochToDateTime(tokens[1])))
 
-            for i in range(4, tokens.__len__):
-                if tokens[2] == "0":
-                    if i  != 5 and i != 12 and i != 14 and i != 15:
-                        saveFile.write("," + tokens[i])
-                        break
+                    for i in range(2, tokensLength):
+                        if tokens[2] == "0":
+                            if i != 3 and i != 4 and i  != 5 and i != 12 and i != 14 and i != 15:
+                                saveFile.write("," + str(tokens[i]))
+                                
 
-                elif tokens[2] == "1":
-                    if i  != 5 and i != 11 and i != 12 and i != 14 and i != 15:
-                        saveFile.write("," + tokens[i])
-                        break
-            
-            if even:
-                even = False
-            else:
-                saveFile.write("\n")
-                even = True
-            
-            while line:
-                line = inFile.readline()
-                tokens = line.split("[\t ]+")
-
-                if even:
-                    saveFile.write(self.epochToDateTime(tokens[1]))
-
-                for i in range(4, tokens.__len__):
-                    if tokens[2] == "0":
-                        if i  != 5 and i != 12 and i != 14 and i != 15:
-                            saveFile.write("," + tokens[i])
-                            break
-
-                    elif tokens[2] == "1":
-                        if i  != 5 and i != 11 and i != 12 and i != 14 and i != 15:
-                            saveFile.write("," + tokens[i])
-                            break
-            if even:
-                even = False
-            else:
-                saveFile.write("\n")
-                even = True
-
-            saveFile.close()
-            inFile.close()
-        except FileNotFoundError:
-            return False
+                        elif tokens[2] == "1":
+                            if i != 3 and i != 4 and i != 5 and i != 11 and i != 12 and i != 14 and i != 15:
+                                saveFile.write("," + str(tokens[i]))
+                                
+                    
+                if not even:
+                    saveFile.write("\n")
+                    even = True
+                else:
+                    even = False
+                    
+            saveFile.close()       
+        except:
+            print("There was an reading/writing error")
 
 
     def epochToDateTime(self, epochTimestamp):
-        dt_object = datetime.utcfromtimestamp(epochTimestamp)
-        formatted_time = dt_object.strftime('%M/%d/%y-%H:%m:%s')
+        dt_object = datetime.utcfromtimestamp(float(epochTimestamp))
+        formatted_time = dt_object.strftime('%m/%d/%y-%H:%M:%S')
         return formatted_time
     
     def loadSave(self, saveFileName):
         isMetaData = True
+        try:
+            with open(saveFileName, 'r') as file:
+                for line in file:
+                    tokens = re.split(r",", line)
+                    tokens.pop() #removes item at last index which is "\n"
 
-        with open(saveFileName, 'r') as file:
-            for line in file:
-                tokens = line.split(",")
+                    dateTimeRegex = "^\\d{2}/\\d{2}/\\d{4}-\\d{2}:\\d{2}:\\d{2}$"
 
-                dateTimeRegex = "^\\d{2}/\\d{2}/\\d{4}-\\d{2}:\\d{2}:\\d{2}$"
+                    if isMetaData and not re.match(dateTimeRegex, tokens[0]):
+                        thermostat = Thermostat(tokens[1])
+                        self.addThermostat(thermostat)
 
-                if isMetaData and not re.match(dateTimeRegex, tokens[0]):
-                    thermostat = Thermostat(tokens[0])
-                    self.addThermostat(thermostat)
-
-                    for token in tokens[1:]:
-                        sensor = Sensor(token)
-                        self.addSensor(thermostat, sensor)
-                
-                else:
-                    temperatureIndex = 1
-                    isMetaData = False
-                    timestamp = tokens[0]
-                    for thermostat in self.thermostats:
-                        for sensors in thermostat.getSensors():
-                            thermostat.addTemperature(sensor, timestamp, float(tokens[temperatureIndex]))
-                            temperatureIndex += 1
+                        for token in thermostat.sensorKeys:
+                            sensor = Sensor(token)
+                            self.addSensor(thermostat, sensor)
+                    
+                    else:
+                        temperatureIndex = 1
+                        isMetaData = False
+                        timestamp = tokens[0]
+                        for thermostat in self.thermostats:
+                            for sensors in thermostat.getSensors():
+                                thermostat.addTemperature(sensor, timestamp, float(tokens[temperatureIndex]))
+                                temperatureIndex += 1
+        except:
+            print("There was a loading error")
                             
     def wipeSave(self, saveFileName):
-        open(saveFileName, "w").close
+        try:
+            open(saveFileName, "w").close
+        except:
+            print("There was a wiping error")
 
     def __str__(self):
-        toString = ""
+        toString = "Thermostat Manager:"
         for thermostat in self.thermostats:
-            toString += thermostat
+            toString += str(thermostat) + "\n"
         return toString
