@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 app = FastAPI()
 
@@ -14,5 +15,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def add_data (filename):
-    
+def writeToSave():
+    raw_directory = Path(__file__).parent / "data" / "raw"
+
+    for file_path in raw_directory.iterdir(): # Iterate through all files in data\raw\
+        manager.writeToSave(manager, file_path, "data/saveFile.csv")
