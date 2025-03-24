@@ -37,7 +37,7 @@ class Sensor:
     
     def __str__(self):
         toString = f"Sensor(ID: {self.sensorID})"
-        toString += self.getAllTimesAndTemps()
+        #toString += self.getAllTimesAndTemps()
         return toString
 
         

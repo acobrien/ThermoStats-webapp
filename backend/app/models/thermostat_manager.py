@@ -102,7 +102,7 @@ class ThermostatManager:
             print("There was a wiping error")
 
     def __str__(self):
-        toString = "Thermostat Manager:"
+        toString = "Thermostat Manager:\n"
         for thermostat in self.thermostats:
             toString += str(thermostat) + "\n"
         return toString
