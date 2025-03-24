@@ -3,6 +3,8 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
+manager = new ThermostatManager
+
 # Enable CORS for local development
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
@@ -12,5 +14,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Makes files in /data available
-app.mount("/data", StaticFiles(directory="data"), name="data")
+def add_data (filename):
+    
