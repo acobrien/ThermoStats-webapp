@@ -1,5 +1,6 @@
 from sensor import Sensor
 from ordered_set import OrderedSet
+import re
 
 class Thermostat:
     def __init__(self, thermostatID):
@@ -29,6 +30,12 @@ class Thermostat:
 
     def getThermostatID(self):
         return self.thermostatID
+    
+    def getThermostatIDNum(self):
+        if self.thermostatID == "East Side":
+            return "0"
+        elif self.thermostatID == "West Side":
+            return "1"
 
     def __str__(self):
         toString = f"Thermostat(ID: {self.thermostatID})\n"

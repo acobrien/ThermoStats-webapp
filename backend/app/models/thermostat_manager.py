@@ -1,7 +1,7 @@
 from thermostat import Thermostat
 from sensor import Sensor
 from ordered_set import OrderedSet
-import re
+import re, os
 from time import strftime, localtime
 
 class ThermostatManager:
@@ -20,9 +20,16 @@ class ThermostatManager:
     
     def writeToSave(self, inFileName, saveFileName): 
         try:
-            saveFile = open(saveFileName, "w")
+            saveFile = open(saveFileName, "a")
             even = True
             
+            fileSize = os.path.getsize(saveFileName)
+             
+            if fileSize == 0:
+                saveFile.write("East Side,Master Bedroom,Master Bathroom,Office," +
+                        "Ty's Bedroom,Luke's Bedroom,Sabry's Bedroom,Living Room\n" +
+                        "West Side,Brody's Bedroom,Kitchen,Den,Bar,Living Room,Outside\n")
+                
             with open(inFileName, "r") as file:
                 for line in file:
                     tokens = re.split(r"\t+", line)
@@ -50,7 +57,7 @@ class ThermostatManager:
                     
             saveFile.close()       
         except:
-            print("There was an reading/writing error")
+            print("There was a reading/writing error")
 
 
     def epochToDateTime(self, epochTimestamp):
@@ -62,29 +69,31 @@ class ThermostatManager:
         try:
             with open(saveFileName, 'r') as file:
                 for line in file:
-                    tokens = re.split(r",", line)
-                    tokens.pop() #removes item at last index which is "\n"
+                    cleanedLine = line.rstrip().strip(",")
+                    tokens = re.split(r",", cleanedLine)
 
                     dateTimeRegex = "^\\d{2}/\\d{2}/\\d{4}-\\d{2}:\\d{2}:\\d{2}$"
 
                     if isMetaData and not re.match(dateTimeRegex, tokens[0]):
-                        thermostat = Thermostat(tokens[1])
+                        thermostat = Thermostat(tokens[0])
                         self.addThermostat(thermostat)
 
-                        for token in thermostat.sensorKeys:
+                        for token in tokens[1:]:
                             sensor = Sensor(token)
                             self.addSensor(thermostat, sensor)
                     
                     else:
-                        temperatureIndex = 1
                         isMetaData = False
                         timestamp = tokens[0]
                         for thermostat in self.thermostats:
-                            for sensors in thermostat.getSensors():
-                                thermostat.addTemperature(sensor, timestamp, float(tokens[temperatureIndex]))
-                                temperatureIndex += 1
-        except:
-            print("There was a loading error")
+                            if thermostat.getThermostatIDNum() == tokens[1]:
+                                temperatureIndex = 2
+                                for sensor in thermostat.getSensors():
+                                    thermostat.addTemperature(sensor, timestamp, float(tokens[temperatureIndex]))
+                                    temperatureIndex += 1
+
+        except Exception as e:
+            print("There was a loading error" + str(e))
                             
     def wipeSave(self, saveFileName):
         try:

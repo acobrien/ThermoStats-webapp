@@ -8,18 +8,17 @@ class Sensor:
         self.dateMap = OrderedDict()
     
     def addTemperature(self, timestamp, temperature):
-        date = timestamp[0, 10]
+        date = timestamp[:10]
         time = timestamp[11:]
-        if date in self.dateMap:
-            self.dateMap[date] = {time: temperature}
-            return
-        self.dateMap[date] = {}
+        if date not in self.dateMap:
+            self.dateMap[date] = {}
+        self.dateMap[date][time] = temperature
 
     def getDayTimesAndTemps(self, dayMap):
         timesAndTemps = OrderedSet()
 
         for time in dayMap:
-            combo = time + " : " + dayMap[time]
+            combo = time + " : " + str(dayMap[time])
             timesAndTemps.add(combo)
 
         return timesAndTemps
