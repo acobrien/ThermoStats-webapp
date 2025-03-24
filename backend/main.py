@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
@@ -29,8 +30,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def load_save(save_file_name):
-    manager.loadSave(save_file_name)
+def load_save(save_filename):
+    manager.loadSave(save_filename)
+
+def write_to_save(raw_filename, save_filename):
+    manager.writeToSave(raw_filename, save_filename)
 
 def write_all_to_save(save_file_name):
-    # for every file in data\raw\ , load_save(file)
+    raw_directory = os.path.join('data', 'raw')
+    for raw_filename in os.listdir(raw_directory):
+        write_to_save(raw_filename, save_file_name)
