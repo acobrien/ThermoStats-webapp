@@ -1,8 +1,21 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from contextlib import asynccontextmanager
 from app.models.ThermostatManager import ThermostatManager
 
-app = FastAPI()
+async def startup():
+    # if saveFile.csv is not empty, call read_save to read into manager
+
+async def shutdown():
+    # do shutdown process
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await startup()  # Runs on startup
+    yield
+    await shutdown()  # Runs on shutdown
+
+app = FastAPI(lifespan=lifespan)
 
 manager = ThermostatManager()
 
@@ -15,5 +28,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def writeToSave(inFileName, saveFileName):
-    manager.writeToSave(inFileName, saveFileName)
+def read_save():
