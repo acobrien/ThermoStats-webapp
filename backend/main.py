@@ -5,6 +5,7 @@ from app.models.ThermostatManager import ThermostatManager
 
 async def startup():
     # if saveFile.csv is not empty, call read_save to read into manager
+    # if it is empty, prompt user to read all raw data
 
 async def shutdown():
     # do shutdown process
@@ -28,4 +29,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def read_save():
+def load_save(save_file_name):
+    manager.loadSave(save_file_name)
+
+def write_all_to_save(save_file_name):
+    # for every file in data\raw\ , load_save(file)
