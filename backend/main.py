@@ -1,14 +1,15 @@
 import os
+from email.contentmanager import raw_data_manager
+
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from app.models.ThermostatManager import ThermostatManager
 
-# Absolute path configuration
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/
-DATA_DIR = os.path.join(BASE_DIR, "data")
-RAW_DIR = os.path.join(DATA_DIR, "raw")
-SAVE_PATH = os.path.join(DATA_DIR, "saveFile.csv")  # backend/data/saveFile.csv
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # backend/
+DATA_DIR = os.path.join(BASE_DIR, "data")             # backend/data/
+RAW_DIR = os.path.join(DATA_DIR, "raw")               # backend/data/raw
+SAVE_PATH = os.path.join(DATA_DIR, "saveFile.csv")    # backend/data/saveFile.csv
 
 async def startup():
     # Create required directories
@@ -55,12 +56,6 @@ def write_all_to_save():
         write_to_save(filename, SAVE_PATH)
 
 # API endpoints
-@app.get("/api/status")
-async def get_status():
-    exists = os.path.exists(SAVE_PATH)
-    is_empty = not exists or os.path.getsize(SAVE_PATH) == 0
-    return {"saveFileExists": exists, "saveFileIsEmpty": is_empty}
-
 @app.post("/api/load-all-raw")
 async def load_all_raw():
     write_all_to_save()
@@ -69,13 +64,10 @@ async def load_all_raw():
 
 @app.post("/api/process-file")
 async def process_file(data: dict):
-    filename = data.get("filename")
-    if not filename:
-        raise HTTPException(status_code=400, detail="Filename required")
-
+    raw_filename = data.get("raw_filename")
     try:
-        write_to_save(filename, SAVE_PATH)  # Explicit save path
+        write_to_save(raw_filename, SAVE_PATH)  # Explicit save path
         load_save(SAVE_PATH)
-        return {"message": f"File {filename} processed successfully."}
+        return {"message": f"File {raw_filename} processed successfully."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
