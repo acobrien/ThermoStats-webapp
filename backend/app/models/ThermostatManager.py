@@ -1,5 +1,5 @@
-from .Thermostat import Thermostat
-from .Sensor import Sensor
+from Thermostat import Thermostat
+from Sensor import Sensor
 from ordered_set import OrderedSet
 import re, os
 from time import strftime, localtime
@@ -50,11 +50,11 @@ class ThermostatManager:
                                     saveFile.write("," + str(tokens[i]))
 
                         # Handle line endings
-                        if not even:
-                            saveFile.write("\n")
-                            even = True
-                        else:
-                            even = False
+                        # if not even:
+                        #     saveFile.write("\n")
+                        #     even = True
+                        # else:
+                        #     even = False
 
         except Exception as e:
             print(f"Error in writeToSave: {str(e)}")
