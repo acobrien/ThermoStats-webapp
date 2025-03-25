@@ -1,5 +1,5 @@
-from Thermostat import Thermostat
-from Sensor import Sensor
+from .Thermostat import Thermostat
+from .Sensor import Sensor
 from ordered_set import OrderedSet
 import re, os
 from time import strftime, localtime

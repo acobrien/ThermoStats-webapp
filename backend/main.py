@@ -5,19 +5,20 @@ from contextlib import asynccontextmanager
 from app.models.ThermostatManager import ThermostatManager
 
 # Absolute path configuration
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Points to backend/
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/
 DATA_DIR = os.path.join(BASE_DIR, "data")
 RAW_DIR = os.path.join(DATA_DIR, "raw")
 SAVE_PATH = os.path.join(DATA_DIR, "saveFile.csv")  # backend/data/saveFile.csv
 
 async def startup():
     # Create required directories
-    os.makedirs(RAW_DIR, exist_ok=True)
+    os.makedirs(RAW_DIR, exist_ok = True)
 
-    # Initialize save file if missing
+    # Create save file if missing
     if not os.path.exists(SAVE_PATH):
         open(SAVE_PATH, 'a').close()
 
+    # Load save if it has data
     if os.path.getsize(SAVE_PATH) > 0:
         load_save(SAVE_PATH)
 
@@ -30,7 +31,7 @@ async def lifespan(app: FastAPI):
     yield
     await shutdown()
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan = lifespan)
 manager = ThermostatManager()
 
 # Enable CORS
@@ -46,15 +47,12 @@ def load_save(save_filename):
     manager.loadSave(save_filename)
 
 def write_to_save(raw_filename, save_path):
-    # Get full path to raw file
     raw_file_path = os.path.join(RAW_DIR, raw_filename)
-
-    # Ensure we write to the correct save path
     manager.writeToSave(raw_file_path, save_path)
 
 def write_all_to_save():
     for filename in os.listdir(RAW_DIR):
-        write_to_save(filename, SAVE_PATH)  # Explicitly use SAVE_PATH
+        write_to_save(filename, SAVE_PATH)
 
 # API endpoints
 @app.get("/api/status")
