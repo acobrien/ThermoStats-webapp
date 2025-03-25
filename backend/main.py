@@ -4,14 +4,25 @@ from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from app.models.ThermostatManager import ThermostatManager
 
+# Absolute path configuration
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Points to backend/
+DATA_DIR = os.path.join(BASE_DIR, "data")
+RAW_DIR = os.path.join(DATA_DIR, "raw")
+SAVE_PATH = os.path.join(DATA_DIR, "saveFile.csv")  # backend/data/saveFile.csv
+
 async def startup():
-    # Silently load save file if it exists and is non-empty
-    save_file = "saveFile.csv"
-    if os.path.exists(save_file) and os.path.getsize(save_file) > 0:
-        load_save(save_file)
+    # Create required directories
+    os.makedirs(RAW_DIR, exist_ok=True)
+
+    # Initialize save file if missing
+    if not os.path.exists(SAVE_PATH):
+        open(SAVE_PATH, 'a').close()
+
+    if os.path.getsize(SAVE_PATH) > 0:
+        load_save(SAVE_PATH)
 
 async def shutdown():
-    pass  # Add any shutdown logic if needed
+    pass
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -21,9 +32,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 manager = ThermostatManager()
-
-# Serve raw files for frontend access
-app.mount("/data", StaticFiles(directory="data/raw"), name="raw_data")
 
 # Enable CORS
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,32 +45,39 @@ app.add_middleware(
 def load_save(save_filename):
     manager.loadSave(save_filename)
 
-def write_to_save(raw_filename, save_filename):
-    manager.writeToSave(raw_filename, save_filename)
+def write_to_save(raw_filename, save_path):
+    # Get full path to raw file
+    raw_file_path = os.path.join(RAW_DIR, raw_filename)
 
-def write_all_to_save(save_file_name):
-    raw_dir = os.path.join('data', 'raw')
-    for filename in os.listdir(raw_dir):
-        write_to_save(filename, save_file_name)
+    # Ensure we write to the correct save path
+    manager.writeToSave(raw_file_path, save_path)
+
+def write_all_to_save():
+    for filename in os.listdir(RAW_DIR):
+        write_to_save(filename, SAVE_PATH)  # Explicitly use SAVE_PATH
+
+# API endpoints
+@app.get("/api/status")
+async def get_status():
+    exists = os.path.exists(SAVE_PATH)
+    is_empty = not exists or os.path.getsize(SAVE_PATH) == 0
+    return {"saveFileExists": exists, "saveFileIsEmpty": is_empty}
 
 @app.post("/api/load-all-raw")
-async def handle_load_all_raw():
-    """Endpoint to process all raw files into save file"""
-    save_file = "saveFile.csv"
-    write_all_to_save(save_file)
-    load_save(save_file)  # Refresh manager with new data
-    return {"message": "All raw data processed successfully"}
+async def load_all_raw():
+    write_all_to_save()
+    load_save(SAVE_PATH)
+    return {"message": "All raw data processed and loaded."}
 
 @app.post("/api/process-file")
-async def handle_process_file(data: dict):
-    """Endpoint to process a single file"""
-    if not (filename := data.get("filename")):
-        raise HTTPException(400, "Filename required")
+async def process_file(data: dict):
+    filename = data.get("filename")
+    if not filename:
+        raise HTTPException(status_code=400, detail="Filename required")
 
-    save_file = "saveFile.csv"
     try:
-        write_to_save(filename, save_file)
-        load_save(save_file)  # Refresh manager
-        return {"message": f"Processed {filename} successfully"}
+        write_to_save(filename, SAVE_PATH)  # Explicit save path
+        load_save(SAVE_PATH)
+        return {"message": f"File {filename} processed successfully."}
     except Exception as e:
-        raise HTTPException(500, str(e))
+        raise HTTPException(status_code=500, detail=str(e))

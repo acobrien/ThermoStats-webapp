@@ -1,5 +1,5 @@
-from Thermostat import Thermostat
-from Sensor import Sensor
+from .Thermostat import Thermostat
+from .Sensor import Sensor
 from ordered_set import OrderedSet
 import re, os
 from time import strftime, localtime
@@ -17,47 +17,47 @@ class ThermostatManager:
     
     def getThermostats(self):
         return self.thermostats
-    
-    def writeToSave(self, inFileName, saveFileName): 
+
+    def writeToSave(self, inFileName, saveFileName):
         try:
-            saveFile = open(saveFileName, "a")
-            even = True
-            
-            fileSize = os.path.getsize(saveFileName)
-             
-            if fileSize == 0:
-                saveFile.write("East Side,Master Bedroom,Master Bathroom,Office," +
-                        "Ty's Bedroom,Luke's Bedroom,Sabry's Bedroom,Living Room\n" +
-                        "West Side,Brody's Bedroom,Kitchen,Den,Bar,Living Room,Outside\n")
-                
-            with open(inFileName, "r") as file:
-                for line in file:
-                    tokens = re.split(r"\t+", line)
-                    tokensLength = len(tokens)
+            os.makedirs(os.path.dirname(saveFileName), exist_ok=True)
 
-                    if even:
-                        saveFile.write(str(self.epochToDateTime(tokens[1])))
+            with open(saveFileName, "a+") as saveFile:  # Use a+ mode to read/write
+                saveFile.seek(0)  # Move to start to check file size
+                even = True
 
-                    for i in range(2, tokensLength):
-                        if tokens[2] == "0":
-                            if i != 3 and i != 4 and i  != 5 and i != 12 and i != 14 and i != 15:
-                                saveFile.write("," + str(tokens[i]))
-                                
+                # Check if file is empty
+                if os.fstat(saveFile.fileno()).st_size == 0:
+                    saveFile.write("East Side,Master Bedroom,Master Bathroom,Office," +
+                                   "Ty's Bedroom,Luke's Bedroom,Sabry's Bedroom,Living Room\n" +
+                                   "West Side,Brody's Bedroom,Kitchen,Den,Bar,Living Room,Outside\n")
 
-                        elif tokens[2] == "1":
-                            if i != 3 and i != 4 and i != 5 and i != 11 and i != 12 and i != 14 and i != 15:
-                                saveFile.write("," + str(tokens[i]))
-                                
-                    
-                if not even:
-                    saveFile.write("\n")
-                    even = True
-                else:
-                    even = False
-                    
-            saveFile.close()       
-        except:
-            print("There was a reading/writing error")
+                # Now process the input file
+                with open(inFileName, "r") as inputFile:
+                    for line in inputFile:
+                        tokens = re.split(r"\t+", line)
+                        tokensLength = len(tokens)
+
+                        if even:
+                            saveFile.write(str(self.epochToDateTime(tokens[1])))
+
+                        for i in range(2, tokensLength):
+                            if tokens[2] == "0":
+                                if i not in {3,4,5,12,14,15}:
+                                    saveFile.write("," + str(tokens[i]))
+                            elif tokens[2] == "1":
+                                if i not in {3,4,5,11,12,14,15}:
+                                    saveFile.write("," + str(tokens[i]))
+
+                        # Handle line endings
+                        if not even:
+                            saveFile.write("\n")
+                            even = True
+                        else:
+                            even = False
+
+        except Exception as e:
+            print(f"Error in writeToSave: {str(e)}")
 
 
     def epochToDateTime(self, epochTimestamp):

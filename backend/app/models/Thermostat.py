@@ -1,6 +1,4 @@
-from Sensor import Sensor
 from ordered_set import OrderedSet
-import re
 
 class Thermostat:
     def __init__(self, thermostatID):

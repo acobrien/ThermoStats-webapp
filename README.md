@@ -12,10 +12,7 @@ py -m venv venv
 
 venv\Scripts\activate
 
-pip install fastapi uvicorn
-
-NECESSARY python libraries:
-    pip install ordered_set
+pip install fastapi uvicorn ordered_set
 
 uvicorn main:app --reload
 
