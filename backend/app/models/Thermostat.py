@@ -37,6 +37,6 @@ class Thermostat:
 
     def __str__(self):
         toString = f"Thermostat(ID: {self.thermostatID})\n"
-        for sensor in self.sensors:
-            toString += str(sensor)
+        #for sensor in self.sensors:
+        #    toString += str(sensor)
         return toString

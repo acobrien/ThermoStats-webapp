@@ -14,16 +14,19 @@ class Sensor:
             self.dateMap[date] = {}
         self.dateMap[date][time] = temperature
 
-    def getDayTimesAndTemps(self, dayMap):
+    def getDayTimesAndTemps(self, date):
         timesAndTemps = OrderedSet()
+        if date in self.dateMap:
+            for time in self.dateMap[date]:
+                combo = time + " : " + str(self.dateMap[date][time])
+                timesAndTemps.add(combo)
+            
+            return timesAndTemps
+        else:
+            return KeyError("Date not found in dateMap")
 
-        for time in dayMap:
-            combo = time + " : " + str(dayMap[time])
-            timesAndTemps.add(combo)
-
-        return timesAndTemps
-
-    def getAllTimesAndTemps(self):
+        
+    def getAllTimesAndTempsString(self):
         dateString = ""
         for date in self.dateMap.keys():
             dateString += str(self.getDayTimesAndTemps(self.dateMap.get(date))) + "\n"

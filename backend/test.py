@@ -1,5 +1,5 @@
 import os
-from app.models.ThermostatManager import ThermostatManager
+from backend.app.models.SystemManager import SystemManager
 
 # Absolute path configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/
@@ -7,7 +7,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 RAW_DIR = os.path.join(DATA_DIR, "raw")
 SAVE_PATH = os.path.join(DATA_DIR, "saveFile.csv")  # backend/data/saveFile.csv
 
-manager = ThermostatManager()
+manager = SystemManager()
 
 print("Base:", BASE_DIR)
 print("Data:", DATA_DIR)

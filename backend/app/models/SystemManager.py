@@ -1,16 +1,20 @@
-from .Thermostat import Thermostat
-from .Sensor import Sensor
+from Thermostat import Thermostat
+from Sensor import Sensor
+from ThermostatAnalizer import ThermostatAnalizer
 from ordered_set import OrderedSet
 import re, os
 from time import strftime, localtime
 
-class ThermostatManager:
+class SystemManager:
 
     def __init__(self):
         self.thermostats = OrderedSet()
+        self.thermostatAnalizers = OrderedSet()
     
     def addThermostat(self, thermostat):
         self.thermostats.add(thermostat)
+        thermostatAnalizer = ThermostatAnalizer(thermostat)
+        self.thermostatAnalizers.add(thermostatAnalizer)
     
     def addSensor(self, thermostat, sensor):
         thermostat.addSensor(sensor)
@@ -100,6 +104,12 @@ class ThermostatManager:
             open(saveFileName, "w").close
         except:
             print("There was a wiping error")
+
+    def callAnalysisExamplePrintAverageTemperaturePerSensorPerDay(self, thermostatAnalizerID, date):
+        for thermostatAnalizer in self.thermostatAnalizers:
+            if thermostatAnalizerID == thermostatAnalizer.getThermostatAnalizerID():
+                return thermostatAnalizer.analysisExamplePrintAverageTemperaturePerSensorOnDay(date)
+        return "Unable to locate Thermostat Analizer"
 
     def __str__(self):
         toString = "Thermostat Manager:\n"

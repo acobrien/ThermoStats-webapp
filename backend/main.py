@@ -4,7 +4,7 @@ from email.contentmanager import raw_data_manager
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
-from app.models.ThermostatManager import ThermostatManager
+from backend.app.models.SystemManager import SystemManager
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # backend/
 DATA_DIR = os.path.join(BASE_DIR, "data")             # backend/data/
@@ -33,7 +33,7 @@ async def lifespan(app: FastAPI):
     await shutdown()
 
 app = FastAPI(lifespan = lifespan)
-manager = ThermostatManager()
+manager = SystemManager()
 
 # Enable CORS
 from fastapi.middleware.cors import CORSMiddleware
