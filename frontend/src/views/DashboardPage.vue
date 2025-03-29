@@ -1,9 +1,8 @@
 <template>
   <div>
-    <!-- Bulk write button -->
+
     <button @click="writeAllRaw">Write All Raw Files to Savefile</button>
 
-    <!-- Single file controls -->
     <div class="single-file">
       <input
           v-model="filename"
@@ -12,6 +11,7 @@
       >
       <button @click="writeSingleFile">Write Single File</button>
     </div>
+
   </div>
 </template>
 
@@ -27,7 +27,8 @@ const writeAllRaw = async () => {
     });
     const result = await response.json();
     console.log('Bulk write result:', result.message);
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Bulk write failed:', error);
   }
 };
