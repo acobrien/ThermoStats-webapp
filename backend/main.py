@@ -4,7 +4,7 @@ from email.contentmanager import raw_data_manager
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
-from backend.app.models.SystemManager import SystemManager
+from app.models.SystemManager import SystemManager
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # backend/
 DATA_DIR = os.path.join(BASE_DIR, "data")             # backend/data/

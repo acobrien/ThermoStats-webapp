@@ -1,5 +1,5 @@
-from Thermostat import Thermostat
-from Sensor import Sensor
+from .Thermostat import Thermostat
+from .Sensor import Sensor
 import re
 
 class ThermostatAnalizer:
