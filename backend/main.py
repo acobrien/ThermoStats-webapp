@@ -13,19 +13,14 @@ SAVE_PATH = os.path.join(DATA_DIR, "saveFile.csv")    # backend/data/saveFile.cs
 
 async def startup():
     os.makedirs(RAW_DIR, exist_ok = True)
-
     if not os.path.exists(SAVE_PATH):
         open(SAVE_PATH, 'a').close()
 
     if os.path.getsize(SAVE_PATH) > 0:
         load_save(SAVE_PATH)
-
     else:
         write_all_to_save()
         load_save(SAVE_PATH)
-
-async def shutdown():
-    pass
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -45,26 +40,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def load_save(save_filename):
-    manager.loadSave(save_filename)
-
-def write_to_save(raw_filename, save_path):
-    raw_file_path = os.path.join(RAW_DIR, raw_filename)
-    manager.writeToSave(raw_file_path, save_path)
-
-def write_all_to_save():
-    for filename in os.listdir(RAW_DIR):
-        write_to_save(filename, SAVE_PATH)
-
 # API endpoints
 
 @app.get("/")
 def home():
     return {"message": "Server is running"}
-
-@app.get("/api/options")
-def get_options():
-    return ["Apple", "Banana", "Cherry", "Date", "Elderberry"]
 
 @app.get("/api/thermostat_options")
 def get_thermostat_options():
@@ -77,3 +57,16 @@ def get_sensor_options():
 @app.get("/api/date_options")
 def get_date_options():
     return ["date1", "date2", "date3"]
+
+# Methods
+
+def load_save(save_filename):
+    manager.loadSave(save_filename)
+
+def write_to_save(raw_filename, save_path):
+    raw_file_path = os.path.join(RAW_DIR, raw_filename)
+    manager.writeToSave(raw_file_path, save_path)
+
+def write_all_to_save():
+    for filename in os.listdir(RAW_DIR):
+        write_to_save(filename, SAVE_PATH)
