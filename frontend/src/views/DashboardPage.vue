@@ -3,7 +3,7 @@
     <!-- Thermostat Select -->
     <div class="select-wrapper">
       <select v-model="selectedOption1">
-        <option v-for="option in options1" :key="option" :value="option">
+        <option v-for="option in thermostat_options" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
@@ -12,7 +12,7 @@
     <!-- Sensor Select -->
     <div class="select-wrapper">
       <select v-model="selectedOption2">
-        <option v-for="option in options2" :key="option" :value="option">
+        <option v-for="option in sensor_options" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
@@ -21,7 +21,7 @@
     <!-- Date Select -->
     <div class="select-wrapper">
       <select v-model="selectedOption3">
-        <option v-for="option in options3" :key="option" :value="option">
+        <option v-for="option in date_options" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
@@ -34,21 +34,21 @@
 export default {
   data() {
     return {
-      options1: [],
-      options2: [],
-      options3: [],
+      thermostat_options: [],
+      sensor_options: [],
+      date_options: [],
     };
   },
   async created() {
-    const [response1, response2, response3] = await Promise.all([
+    const [thermostat_response, sensor_response, date_response] = await Promise.all([
       fetch('http://localhost:8000/api/thermostat_options'),
       fetch('http://localhost:8000/api/sensor_options'),
       fetch('http://localhost:8000/api/date_options'),
     ]);
 
-    this.options1 = await response1.json();
-    this.options2 = await response2.json();
-    this.options3 = await response3.json();
+    this.thermostat_options = await thermostat_response.json();
+    this.sensor_options = await sensor_response.json();
+    this.date_options = await date_response.json();
   },
 };
 </script>
