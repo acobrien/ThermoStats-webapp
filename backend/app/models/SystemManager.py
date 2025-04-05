@@ -9,12 +9,12 @@ class SystemManager:
 
     def __init__(self):
         self.thermostats = OrderedSet()
-        self.thermostatAnalizers = OrderedSet()
+        self.thermostatAnalyzers = OrderedSet()
     
     def addThermostat(self, thermostat):
         self.thermostats.add(thermostat)
-        thermostatAnalizer = ThermostatAnalizer(thermostat)
-        self.thermostatAnalizers.add(thermostatAnalizer)
+        thermostatAnalyzer = ThermostatAnalyzer(thermostat)
+        self.thermostatAnalyzers.add(thermostatAnalyzer)
     
     def addSensor(self, thermostat, sensor):
         thermostat.addSensor(sensor)
@@ -105,11 +105,11 @@ class SystemManager:
         except:
             print("There was a wiping error")
 
-    def callAnalysisExamplePrintAverageTemperaturePerSensorPerDay(self, thermostatAnalizerID, date):
-        for thermostatAnalizer in self.thermostatAnalizers:
-            if thermostatAnalizerID == thermostatAnalizer.getThermostatAnalizerID():
-                return thermostatAnalizer.analysisExamplePrintAverageTemperaturePerSensorOnDay(date)
-        return "Unable to locate Thermostat Analizer"
+    def callAnalysisExamplePrintAverageTemperaturePerSensorPerDay(self, thermostatAnalyzerID, date):
+        for thermostatAnalyzer in self.thermostatAnalyzers:
+            if thermostatAnalyzerID == thermostatAnalyzer.getThermostatAnalyzerID():
+                return thermostatAnalyzer.analysisExamplePrintAverageTemperaturePerSensorOnDay(date)
+        return "Unable to locate Thermostat Analyzer"
 
     def __str__(self):
         toString = "Thermostat Manager:\n"

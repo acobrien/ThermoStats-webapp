@@ -2,14 +2,14 @@ from .Thermostat import Thermostat
 from .Sensor import Sensor
 import re
 
-class ThermostatAnalizer:
+class ThermostatAnalyzer:
 
     def __init__(self, thermostat):
         self.thermostat = thermostat
-        self.thermostatAnalizerID = self.thermostat.getThermostatID() + " Analizer"
+        self.thermostatAnalyzerID = self.thermostat.getThermostatID() + " Analyzer"
 
-    def getThermostatAnalizerID(self):
-        return self.thermostatAnalizerID
+    def getThermostatAnalyzerID(self):
+        return self.thermostatAnalyzerID
         
     def analysisExamplePrintAverageTemperaturePerSensorOnDay(self, date):
         print(str(self.thermostat.getThermostatID()) + ":")
