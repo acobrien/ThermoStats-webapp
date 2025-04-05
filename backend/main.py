@@ -58,6 +58,22 @@ def write_all_to_save():
 
 # API endpoints
 
+@app.get("/")
+def home():
+    return {"message": "Server is running"}
+
 @app.get("/api/options")
 def get_options():
     return ["Apple", "Banana", "Cherry", "Date", "Elderberry"]
+
+@app.get("/api/thermostat_options")
+def get_thermostat_options():
+    return ["thermostat1", "thermostat2", "thermostat3"]
+
+@app.get("/api/sensor_options")
+def get_sensor_options():
+    return ["sensor1", "sensor2", "sensor3"]
+
+@app.get("/api/date_options")
+def get_date_options():
+    return ["date1", "date2", "date3"]
