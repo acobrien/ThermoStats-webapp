@@ -105,10 +105,11 @@ class SystemManager:
         except:
             print("There was a wiping error")
 
-    def callAnalysisExamplePrintAverageTemperaturePerSensorPerDay(self, thermostatAnalyzerID, date):
+    def callAnalysisGetNumericalStats(self, thermostatAnalyzerID, date):
+        #Attemps to find the right thermostatAnalyzer to call method on
         for thermostatAnalyzer in self.thermostatAnalyzers:
             if thermostatAnalyzerID == thermostatAnalyzer.getThermostatAnalyzerID():
-                return thermostatAnalyzer.analysisExamplePrintAverageTemperaturePerSensorOnDay(date)
+                return thermostatAnalyzer.analysisGetNumericalStats(date)
         return "Unable to locate Thermostat Analyzer"
 
     def __str__(self):

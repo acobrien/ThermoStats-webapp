@@ -25,7 +25,9 @@ class Sensor:
         else:
             return KeyError("Date not found in dateMap")
 
-        
+    def getSensorID(self):
+        return self.sensorID
+    
     def getAllTimesAndTempsString(self):
         dateString = ""
         for date in self.dateMap.keys():
@@ -40,7 +42,5 @@ class Sensor:
     
     def __str__(self):
         toString = f"Sensor(ID: {self.sensorID})"
-        #toString += self.getAllTimesAndTemps()
+        #-- toString += self.getAllTimesAndTemps() --NOTE: OLD CODE, prints out 1000+ lines just to test if stuff is being added
         return toString
-
-        
