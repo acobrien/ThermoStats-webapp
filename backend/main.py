@@ -48,7 +48,10 @@ def home():
 
 @app.get("/api/thermostat_options")
 def get_thermostat_options():
-    return ["thermostat1", "thermostat2", "thermostat3"]
+    thermostats = []
+    for thermostat in manager.getThermostats():
+        thermostats.append(thermostat.getThermostatID())
+    return thermostats
 
 @app.get("/api/sensor_options")
 def get_sensor_options():
