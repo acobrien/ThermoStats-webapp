@@ -30,6 +30,7 @@
 </template>
 
 <script>
+//FIXME: NEED FRONTEND FOR DATE SELECTION
 export default {
   data() {
     return {
