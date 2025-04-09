@@ -26,6 +26,12 @@ class Thermostat:
     def getSensors(self):
         return self.sensors
 
+    def getSensorByID(self, searchID):
+        for sensor in self.sensors:
+            if sensor.getSensorID() == searchID:
+                return sensor
+        return none
+
     def getThermostatID(self):
         return self.thermostatID
     
