@@ -2,7 +2,7 @@
   <div class="select-container">
     <!-- Thermostat Select -->
     <div class="select-wrapper">
-      <select v-model="selectedOption1">
+      <select v-model="selectedOption1" @change="updateSensors">
         <option v-for="option in thermostat_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -26,7 +26,6 @@
         </option>
       </select>
     </div>
-
   </div>
 </template>
 
@@ -34,22 +33,31 @@
 export default {
   data() {
     return {
+      selectedOption1: '',
+      selectedOption2: '',
+      selectedOption3: '',
       thermostat_options: [],
       sensor_options: [],
       date_options: [],
     };
   },
   async created() {
-    const [thermostat_response, sensor_response, date_response] = await Promise.all([
+    const [thermostat_response, date_response] = await Promise.all([
       fetch('http://localhost:8000/api/thermostat_options'),
-      fetch('http://localhost:8000/api/sensor_options'),
       fetch('http://localhost:8000/api/date_options'),
     ]);
 
     this.thermostat_options = await thermostat_response.json();
-    this.sensor_options = await sensor_response.json();
     this.date_options = await date_response.json();
+    this.sensor_options = []; // Start with empty sensors
   },
+  methods: {
+    async updateSensors() {
+      if (!this.selectedOption1) return;
+      const response = await fetch(`http://localhost:8000/api/sensor_options?thermostat_id=${this.selectedOption1}`);
+      this.sensor_options = await response.json();
+    }
+  }
 };
 </script>
 

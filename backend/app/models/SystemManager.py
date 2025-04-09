@@ -22,6 +22,12 @@ class SystemManager:
     def getThermostats(self):
         return self.thermostats
 
+    def getThermostatByID(self, searchID):
+        for thermostat in self.thermostats:
+            if thermostat.getThermostatID() == searchID:
+                return thermostat
+        return none
+
     def writeToSave(self, inFileName, saveFileName):
         try:
             os.makedirs(os.path.dirname(saveFileName), exist_ok=True)
