@@ -11,7 +11,7 @@
 
     <!-- Sensor Select -->
     <div class="select-wrapper">
-      <select v-model="selectedOption2">
+      <select v-model="selectedOption2" @change="updateDates">
         <option v-for="option in sensor_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -30,7 +30,6 @@
 </template>
 
 <script>
-//FIXME: NEED FRONTEND FOR DATE SELECTION
 export default {
   data() {
     return {
@@ -43,20 +42,28 @@ export default {
     };
   },
   async created() {
-    const [thermostat_response, date_response] = await Promise.all([
-      fetch('http://localhost:8000/api/thermostat_options'),
-      fetch('http://localhost:8000/api/date_options'),
+    const [thermostat_response] = await Promise.all([
+      fetch('http://localhost:8000/api/thermostat_options')
     ]);
 
     this.thermostat_options = await thermostat_response.json();
-    this.date_options = await date_response.json();
-    this.sensor_options = []; // Start with empty sensors
+    this.date_options = [];
+    this.sensor_options = [];
   },
   methods: {
     async updateSensors() {
       if (!this.selectedOption1) return;
+      this.date_options = [];
+      this.selectedOption2 = '';
+      this.selectedOption3 = '';
       const response = await fetch(`http://localhost:8000/api/sensor_options?thermostat_id=${this.selectedOption1}`);
       this.sensor_options = await response.json();
+    },
+    async updateDates() {
+      if (!this.selectedOption1 || !this.selectedOption2) return;
+      this.selectedOption3 = '';
+      const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedOption1}&sensor_id=${this.selectedOption2}`);
+      this.date_options = await response.json();
     }
   }
 };

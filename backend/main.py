@@ -74,7 +74,10 @@ def get_date_options(thermostat_id: str, sensor_id: str):
     if sensor is None:
         return []
 
-    return sensor.getDates()
+    dates = []
+    for date in sensor.getDates():
+        dates.append(date)
+    return dates
 
 # Methods
 

@@ -35,7 +35,7 @@ class Sensor:
         return dateString
 
     def getDates(self):
-        return self.dateMap.keys
+        return list(self.dateMap.keys())
     
     def getDayMap(self, date):
         return self.dateMap.get(date)
