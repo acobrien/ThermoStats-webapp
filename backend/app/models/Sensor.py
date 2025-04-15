@@ -25,6 +25,24 @@ class Sensor:
         else:
             return KeyError("Date not found in dateMap")
 
+    def getTimeList(self, date):
+        timeList = []
+        if date in self.dateMap:
+            for time in self.dateMap[date]:
+                timeList.append(time)
+            return timeList
+        else:
+            return KeyError("Date not found in dateMap")
+
+    def getTempList(self, date):
+        tempList = []
+        if date in self.dateMap:
+            for time in self.dateMap[date]:
+                tempList.append(self.dateMap[date][time][1])
+            return tempList
+        else:
+            return KeyError("Date not found in dateMap")
+
     def getSensorID(self):
         return self.sensorID
     

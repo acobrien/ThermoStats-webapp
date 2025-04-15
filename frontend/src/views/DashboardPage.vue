@@ -2,7 +2,7 @@
   <div class="select-container">
     <!-- Thermostat Select -->
     <div class="select-wrapper">
-      <select v-model="selectedOption1" @change="updateSensors">
+      <select v-model="selectedThermostat" @change="updateSensors">
         <option v-for="option in thermostat_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -11,7 +11,7 @@
 
     <!-- Sensor Select -->
     <div class="select-wrapper">
-      <select v-model="selectedOption2" @change="updateDates">
+      <select v-model="selectedSensor" @change="updateDates">
         <option v-for="option in sensor_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -20,12 +20,18 @@
 
     <!-- Date Select -->
     <div class="select-wrapper">
-      <select v-model="selectedOption3">
+      <select v-model="selectedDate" @change="updateChart">
         <option v-for="option in date_options" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
     </div>
+  </div>
+  <div>
+    <h3>Time List:</h3>
+    <div>{{ timeList }}</div>
+    <h3>Temperature List:</h3>
+    <div>{{ tempList }}</div>
   </div>
 </template>
 
@@ -33,12 +39,14 @@
 export default {
   data() {
     return {
-      selectedOption1: '',
-      selectedOption2: '',
-      selectedOption3: '',
+      selectedThermostat: '',
+      selectedSensor: '',
+      selectedDate: '',
       thermostat_options: [],
       sensor_options: [],
       date_options: [],
+      timeList: [],
+      tempList: [],
     };
   },
   async created() {
@@ -52,18 +60,25 @@ export default {
   },
   methods: {
     async updateSensors() {
-      if (!this.selectedOption1) return;
+      if (!this.selectedThermostat) return;
       this.date_options = [];
-      this.selectedOption2 = '';
-      this.selectedOption3 = '';
-      const response = await fetch(`http://localhost:8000/api/sensor_options?thermostat_id=${this.selectedOption1}`);
+      this.selectedSensor = '';
+      this.selectedDate = '';
+      const response = await fetch(`http://localhost:8000/api/sensor_options?thermostat_id=${this.selectedThermostat}`);
       this.sensor_options = await response.json();
     },
     async updateDates() {
-      if (!this.selectedOption1 || !this.selectedOption2) return;
-      this.selectedOption3 = '';
-      const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedOption1}&sensor_id=${this.selectedOption2}`);
+      if (!this.selectedThermostat || !this.selectedSensor) return;
+      this.selectedDate = '';
+      const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}`);
       this.date_options = await response.json();
+    },
+    async updateChart() {
+      if (!this.selectedThermostat || !this.selectedSensor || !this.selectedDate) return;
+      const timeResponse = await fetch(`http://localhost:8000/api/time_list?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}&date=${this.selectedDate}`);
+      this.timeList = await timeResponse.json();
+      const tempResponse = await fetch(`http://localhost:8000/api/temp_list?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}&date=${this.selectedDate}`);
+      this.tempList = await tempResponse.json();
     }
   }
 };
