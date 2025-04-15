@@ -26,7 +26,7 @@ class SystemManager:
         for thermostat in self.thermostats:
             if thermostat.getThermostatID() == searchID:
                 return thermostat
-        return none
+        return None
 
     def writeToSave(self, inFileName, saveFileName):
         try:
@@ -53,10 +53,10 @@ class SystemManager:
 
                         for i in range(2, tokensLength):
                             if tokens[2] == "0":
-                                if i not in {3,4,5,12,14,15}:
+                                if i not in {4,5,12,14,15}:
                                     saveFile.write("," + str(tokens[i]))
                             elif tokens[2] == "1":
-                                if i not in {3,4,5,11,12,14,15}:
+                                if i not in {4,5,11,12,14,15}:
                                     saveFile.write("," + str(tokens[i]))
 
                         # Handle line endings
@@ -97,9 +97,9 @@ class SystemManager:
                         timestamp = tokens[0]
                         for thermostat in self.thermostats:
                             if thermostat.getThermostatIDNum() == tokens[1]:
-                                temperatureIndex = 2
+                                temperatureIndex = 3
                                 for sensor in thermostat.getSensors():
-                                    thermostat.addTemperature(sensor, timestamp, float(tokens[temperatureIndex]))
+                                    thermostat.addData(sensor, timestamp, [tokens[2], float(tokens[temperatureIndex])])
                                     temperatureIndex += 1
 
         except Exception as e:

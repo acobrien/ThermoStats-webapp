@@ -17,9 +17,9 @@ class Thermostat:
         if sensor not in self.sensors:
             self.sensors.add(sensor)
 
-    def addTemperature(self, sensor, timestamp, temperature):
+    def addData(self, sensor, timestamp, dataArray):
         if sensor in self.sensors:
-            sensor.addTemperature(timestamp, temperature)
+            sensor.addData(timestamp, dataArray)
             return True
         return False
 
@@ -30,7 +30,7 @@ class Thermostat:
         for sensor in self.sensors:
             if sensor.getSensorID() == searchID:
                 return sensor
-        return none
+        return None
 
     def getThermostatID(self):
         return self.thermostatID
