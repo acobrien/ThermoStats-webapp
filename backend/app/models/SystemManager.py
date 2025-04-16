@@ -59,13 +59,6 @@ class SystemManager:
                                 if i not in {4,5,11,12,14,15}:
                                     saveFile.write("," + str(tokens[i]))
 
-                        # Handle line endings
-                        # if not even:
-                        #     saveFile.write("\n")
-                        #     even = True
-                        # else:
-                        #     even = False
-
         except Exception as e:
             print(f"Error in writeToSave: {str(e)}")
 

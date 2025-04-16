@@ -48,7 +48,7 @@ class Sensor:
         if date in self.dateMap:
             for time in self.dateMap[date]:
 
-                if str(self.dateMap[date][time][0]) == 1 str(self.dateMap[date][time][0]) == 2 or str(self.dateMap[date][time][0]) == 5:
+                if str(self.dateMap[date][time][0]) == 1:
                     energyList.append(1) # Heating
 
                 elif str(self.dateMap[date][time][0]) == 2:
