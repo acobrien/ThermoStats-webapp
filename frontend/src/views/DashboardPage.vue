@@ -28,15 +28,17 @@
     </div>
   </div>
   <div>
-    <h3>Time List:</h3>
-    <div>{{ timeList }}</div>
-    <h3>Temperature List:</h3>
-    <div>{{ tempList }}</div>
+    <temperature-chart :time-list="timeList" :temp-list="tempList"></temperature-chart>
   </div>
 </template>
 
 <script>
+import TemperatureChart from '../assets/components/TemperatureChart';
+
 export default {
+  components: {
+    TemperatureChart
+  },
   data() {
     return {
       selectedThermostat: '',
