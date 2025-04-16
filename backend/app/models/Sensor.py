@@ -43,6 +43,27 @@ class Sensor:
         else:
             return KeyError("Date not found in dateMap")
 
+    def getEnergyList(self, date):
+        energyList = []
+        if date in self.dateMap:
+            for time in self.dateMap[date]:
+
+                if str(self.dateMap[date][time][0]) == 1 str(self.dateMap[date][time][0]) == 2 or str(self.dateMap[date][time][0]) == 5:
+                    energyList.append(1) # Heating
+
+                elif str(self.dateMap[date][time][0]) == 2:
+                    energyList.append(2) # Cooling
+
+                elif str(self.dateMap[date][time][0]) == 5:
+                    energyList.append(5) # Airwave
+
+                else:
+                    energyList.append(0)
+
+            return energyList
+        else:
+            return KeyError("Date not found in dateMap")
+
     def getSensorID(self):
         return self.sensorID
     
