@@ -53,10 +53,10 @@ class SystemManager:
 
                         for i in range(2, tokensLength):
                             if tokens[2] == "0":
-                                if i not in {3,4,5,12,14,15}:
+                                if i not in {4,5,12,14,15}:
                                     saveFile.write("," + str(tokens[i]))
                             elif tokens[2] == "1":
-                                if i not in {3,4,5,11,12,14,15}:
+                                if i not in {4,5,11,12,14,15}:
                                     saveFile.write("," + str(tokens[i]))
 
         except Exception as e:
@@ -81,7 +81,7 @@ class SystemManager:
                         thermostat = Thermostat(tokens[0])
                         self.addThermostat(thermostat)
 
-                        for token in tokens[1:]:
+                        for token in tokens[2:]:
                             sensor = Sensor(token)
                             self.addSensor(thermostat, sensor)
                     
@@ -90,7 +90,11 @@ class SystemManager:
                         timestamp = tokens[0]
                         for thermostat in self.thermostats:
                             if thermostat.getThermostatIDNum() == tokens[1]:
-                                temperatureIndex = 2
+                                temperatureIndex = 3
+                                energyIndex = 2
+
+                                thermostat.addEnergy(timestamp, tokens[energyIndex])
+
                                 for sensor in thermostat.getSensors():
                                     thermostat.addTemperature(sensor, timestamp, float(tokens[temperatureIndex]))
                                     temperatureIndex += 1

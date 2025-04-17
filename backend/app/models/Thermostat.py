@@ -1,9 +1,11 @@
 from ordered_set import OrderedSet
+from collections import OrderedDict
 
 class Thermostat:
     def __init__(self, thermostatID):
         self.thermostatID = thermostatID
         self.sensors = OrderedSet()
+        self.dateActivityMap = OrderedDict()
 
         if self.thermostatID == "0":
             self.sensorKeys = OrderedSet(["Master Bedroom","Master Bathroom","Office",
@@ -12,6 +14,13 @@ class Thermostat:
             self.sensorKeys = OrderedSet(["Brody's Bedroom","Kitchen","Den","Bar","Living Room","Outside"])
         else:
             self.sensorKeys = OrderedSet()
+
+    def addActivity(self, timestamp, activity):
+        date = timestamp[:10]
+        time = timestamp[11:]
+        if date not in self.dateActivityMap:
+            self.dateActivityMap[date] = {}
+        self.dateActivityMap[date][time] = activity
 
     def addSensor(self, sensor):
         if sensor not in self.sensors:
