@@ -17,42 +17,48 @@ class ThermostatAnalyzer:
         #Returns a set of [SensorID, MaxTemp, MinTemp, AverageTemp] for each sensor in thermostat
         #-- print(str(self.thermostat.getThermostatID()) + ":") --NOTE: OLD CODE
         thermostatStatisticsSet = OrderedSet() #Set of sets of statistics for each sensor in thermostat
-        for sensor in self.thermostat.getSensors():
-            #-- print(str(sensor) + f" Average Temperature On {date}: ") --NOTE: OLD CODE
-            sensorStatisticsSet = OrderedSet() #Set of statistics for sensor
-            try:
-                timesAndData = sensor.getDayTimesAndData(date)
-                tempsTotal = 0
-                timesAndDataLength = len(timesAndData)
+        sensors = self.thermostat.getSensors()
+        try:
+            timesAndTempProbe = sensors[0].getDayTimesAndTemps(date)
 
-                minTemp = float('inf') #Sets start index temp as largest
-                maxTemp = float('-inf') #Sets start index temp as smallest
+            for sensor in sensors:
+                #-- print(str(sensor) + f" Average Temperature On {date}: ") --NOTE: OLD CODE
+                sensorStatisticsSet = OrderedSet() #Set of statistics for sensor
+                
+                try:
+                    timesAndTemps = sensor.getDayTimesAndTemps(date)
+                    tempsTotal = 0
+                    timesAndTempsLength = len(timesAndTemps)
 
-                for entry in timesAndData:
-                    entryTokens = re.split(r"\s*:\s*", entry) #Strips semicolon, leaving [time, temp]
-                    currTime = entryTokens[0]
-                    currActivity = entryTokens[1]
-                    currTemp = float(entryTokens[2])
-                    tempsTotal += currTemp
-                    energyTotal = 0
-                    
-                    #Finds min between currTemp and minTemp and checks if it is currTemp @ TIME
-                    #Over complicated because floating point nums are extremely annoying
-                    if math.isclose(min(minTemp, currTemp), currTemp): 
-                        minTemp = [currTime, currTemp]
-                    
-                    #Finds max between currTemp and maxTemp and checks if it is currTemp @ TIME
-                    if math.isclose(max(maxTemp, currTemp), currTemp):
-                        maxTemp = [currTime, currTemp]
+                    minTemp = float('inf') #Sets start index temp as largest
+                    maxTemp = float('-inf') #Sets start index temp as smallest
 
-                #Calculate average temperature and round each float to four decimal places 
-                averageTemp = round((tempsTotal / timesAndDataLength), 4)
-                maxTemp[1] = round(maxTemp[1], 4)
-                minTemp[1] = round(minTemp[1], 4)
+                    for entry in timesAndTemps:
+                        entryTokens = re.split(r" : ", entry) #Strips semicolon, leaving [time, temp]
+                        currTemp = float(entryTokens[1])
+                        currTime = entryTokens[0]
+                        tempsTotal += currTemp
+                        
+                        #Finds min between currTemp and minTemp and checks if it is currTemp @ TIME
+                        #Over complicated because floating point nums are extremely annoying
+                        if math.isclose(min(minTemp, currTemp), currTemp): 
+                            minTemp = [currTime, currTemp]
+                        
+                        #Finds max between currTemp and maxTemp and checks if it is currTemp @ TIME
+                        if math.isclose(max(maxTemp, currTemp), currTemp):
+                            maxTemp = [currTime, currTemp]
 
-                sensorStatisticsSet.update([sensor.getSensorID(), maxTemp, minTemp, averageTemp])
+                    #Calculate average temperature and round each float to four decimal places 
+                    averageTemp = round((tempsTotal / timesAndTempsLength), 4)
+                    maxTemp[1] = round(maxTemp[1], 4)
+                    minTemp[1] = round(minTemp[1], 4)
 
-                thermostatStatisticsSet.add(tuple(sensorStatisticsSet))
-            except Exception as e:
-                print(e)
-        return thermostatStatisticsSet
+                    sensorStatisticsSet.update([sensor.getSensorID(), maxTemp, minTemp, averageTemp])
+
+                    thermostatStatisticsSet.add(tuple(sensorStatisticsSet))
+                except Exception as e:
+                    print(e)
+            return thermostatStatisticsSet    
+        except KeyError as e:
+            return e
+        

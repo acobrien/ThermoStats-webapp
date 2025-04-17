@@ -17,9 +17,9 @@ class Thermostat:
         if sensor not in self.sensors:
             self.sensors.add(sensor)
 
-    def addData(self, sensor, timestamp, dataArray):
+    def addTemperature(self, sensor, timestamp, temperature):
         if sensor in self.sensors:
-            sensor.addData(timestamp, dataArray)
+            sensor.addTemperature(timestamp, temperature)
             return True
         return False
 

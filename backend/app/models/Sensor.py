@@ -7,23 +7,23 @@ class Sensor:
         self.sensorID = sensorID
         self.dateMap = OrderedDict()
     
-    def addData(self, timestamp, dataArray):
+    def addTemperature(self, timestamp, temperature):
         date = timestamp[:10]
         time = timestamp[11:]
         if date not in self.dateMap:
             self.dateMap[date] = {}
-        self.dateMap[date][time] = dataArray #[thermostat mode, temperature]
+        self.dateMap[date][time] = temperature #[thermostat mode, temperature]
 
-    def getDayTimesAndData(self, date):
-        timesAndData = OrderedSet()
+    def getDayTimesAndTemps(self, date):
+        timesAndTemps = OrderedSet()
         if date in self.dateMap:
             for time in self.dateMap[date]:
-                combo = time + " : " + str(self.dateMap[date][time][0]) + " : " + str(self.dateMap[date][time][1])
-                timesAndData.add(combo)
+                combo = time + " : " + str(self.dateMap[date][time])
+                timesAndTemps.add(combo)
             
-            return timesAndData
+            return timesAndTemps
         else:
-            return KeyError("Date not found in dateMap")
+            raise KeyError(f"{date} not found")
 
     def getTimeList(self, date):
         timeList = []
@@ -67,10 +67,10 @@ class Sensor:
     def getSensorID(self):
         return self.sensorID
     
-    def getAllTimesAndDataString(self):
+    def getAllTimesAndTempsString(self):
         dateString = ""
         for date in self.dateMap.keys():
-            dateString += str(self.getDayTimesAndData(self.dateMap.get(date))) + "\n"
+            dateString += str(self.getDayTimesAndTemps(self.dateMap.get(date))) + "\n"
         return dateString
 
     def getDates(self):
