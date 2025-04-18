@@ -1,4 +1,10 @@
 <template>
+  <div>
+    <router-link to="/">
+      <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
+    </router-link>
+  </div>
+
   <div class="select-container">
     <!-- Thermostat Select -->
     <div class="select-wrapper">
@@ -99,6 +105,14 @@ export default {
 </script>
 
 <style scoped>
+.logo {
+  display: block;
+  align-content: center;
+  max-width: 25%;
+  height: auto;
+  margin: auto;
+}
+
 .select-container {
   display: flex;
   gap: 20px;
