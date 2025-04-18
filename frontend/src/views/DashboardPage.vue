@@ -1,48 +1,61 @@
 <template>
+  <div class="app-container">
 
+    <div class="header">
 
-  <div>
-    <router-link to="/">
-      <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
-    </router-link>
-  </div>
+      <div>
+        <router-link to="/">
+          <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
+        </router-link>
+      </div>
 
-  <div class="select-container">
-    <!-- Thermostat Select -->
-    <div class="select-wrapper">
-      <select v-model="selectedThermostat" @change="updateSensors(); updateDates(); updateActivityChart();">
-        <option disabled value="">Thermostat</option>
-        <option v-for="option in thermostat_options" :key="option" :value="option">
-          {{ option }}
-        </option>
-      </select>
+      <div class="select-container">
+        <!-- Thermostat Select -->
+        <div class="select-wrapper">
+          <select v-model="selectedThermostat" @change="updateSensors(); updateDates(); updateActivityChart();">
+            <option disabled value="">Thermostat</option>
+            <option v-for="option in thermostat_options" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sensor Select -->
+        <div class="select-wrapper">
+          <select v-model="selectedSensor" @change="updateTemperatureChart();">
+            <option disabled value="">Sensor</option>
+            <option v-for="option in sensor_options" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Date Select -->
+        <div class="select-wrapper">
+          <select v-model="selectedDate" @change="updateTemperatureChart(); updateActivityChart();">
+            <option disabled value="">Date</option>
+            <option v-for="option in date_options" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Sensor Select -->
-    <div class="select-wrapper">
-      <select v-model="selectedSensor" @change="updateTemperatureChart();">
-        <option disabled value="">Sensor</option>
-        <option v-for="option in sensor_options" :key="option" :value="option">
-          {{ option }}
-        </option>
-      </select>
-    </div>
+    <div class="charts-container">
+      <activity-chart
+          v-if="selectedThermostat && selectedDate"
+          :time-list="thermostatTimeList"
+          :activity-list="thermostatActivityList"
+      ></activity-chart>
 
-    <!-- Date Select -->
-    <div class="select-wrapper">
-      <select v-model="selectedDate" @change="updateTemperatureChart(); updateActivityChart();">
-        <option disabled value="">Date</option>
-        <option v-for="option in date_options" :key="option" :value="option">
-          {{ option }}
-        </option>
-      </select>
+      <temperature-chart
+          v-if="selectedThermostat && selectedSensor && selectedDate"
+          :time-list="sensorTimeList"
+          :temp-list="sensorTempList"
+      ></temperature-chart>
     </div>
-  </div>
-  <div>
-    <temperature-chart :time-list="sensorTimeList" :temp-list="sensorTempList"></temperature-chart>
-  </div>
-  <div>
-    <activity-chart :time-list="thermostatTimeList" :activity-list="thermostatActivityList"></activity-chart>
   </div>
 </template>
 
