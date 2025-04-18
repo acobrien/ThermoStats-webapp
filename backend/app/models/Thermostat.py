@@ -22,6 +22,24 @@ class Thermostat:
             self.dateActivityMap[date] = {}
         self.dateActivityMap[date][time] = activity
 
+    def getTimeList(self, date):
+        timeList = []
+        if date in self.dateActivityMap:
+            for time in self.dateActivityMap[date]:
+                timeList.append(time)
+            return timeList
+        else:
+            return KeyError("Date not found in dateActivityMap")
+
+    def getActivityList(self, date):
+        activityList = []
+        if date in self.dateActivityMap:
+            for time in self.dateActivityMap[date]:
+                activityList.append(self.dateActivityMap[date][time])
+            return activityList
+        else:
+            return KeyError("Date not found in dateActivityMap")
+
     def addSensor(self, sensor):
         if sensor not in self.sensors:
             self.sensors.add(sensor)

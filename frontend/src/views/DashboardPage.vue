@@ -2,7 +2,7 @@
   <div class="select-container">
     <!-- Thermostat Select -->
     <div class="select-wrapper">
-      <select v-model="selectedThermostat" @change="updateSensors">
+      <select v-model="selectedThermostat" @change="updateSensors(); updateActivityChart()">
         <option v-for="option in thermostat_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -11,7 +11,7 @@
 
     <!-- Sensor Select -->
     <div class="select-wrapper">
-      <select v-model="selectedSensor" @change="updateDates(); updateChart();">
+      <select v-model="selectedSensor" @change="updateDates(); updateTemperatureChart();">
         <option v-for="option in sensor_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -20,7 +20,7 @@
 
     <!-- Date Select -->
     <div class="select-wrapper">
-      <select v-model="selectedDate" @change="updateChart">
+      <select v-model="selectedDate" @change="updateTemperatureChart()">
         <option v-for="option in date_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -28,16 +28,21 @@
     </div>
   </div>
   <div>
-    <temperature-chart :time-list="timeList" :temp-list="tempList"></temperature-chart>
+    <temperature-chart :time-list="sensorTimeList" :temp-list="sensorTempList"></temperature-chart>
+  </div>
+  <div>
+    <activity-chart :time-list="thermostatTimeList" :activity-list="thermostatActivityList"></activity-chart>
   </div>
 </template>
 
 <script>
 import TemperatureChart from '../assets/components/TemperatureChart';
+import ActivityChart from '../assets/components/ActivityChart.vue';
 
 export default {
   components: {
-    TemperatureChart
+    TemperatureChart,
+    ActivityChart
   },
   data() {
     return {
@@ -47,8 +52,10 @@ export default {
       thermostat_options: [],
       sensor_options: [],
       date_options: [],
-      timeList: [],
-      tempList: [],
+      sensorTimeList: [],
+      sensorTempList: [],
+      thermostatTimeList: [],
+      thermostatActivityList: []
     };
   },
   async created() {
@@ -74,12 +81,19 @@ export default {
       const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}`);
       this.date_options = await response.json();
     },
-    async updateChart() {
+    async updateTemperatureChart() {
       if (!this.selectedThermostat || !this.selectedSensor || !this.selectedDate) return;
-      const timeResponse = await fetch(`http://localhost:8000/api/time_list?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}&date=${this.selectedDate}`);
-      this.timeList = await timeResponse.json();
-      const tempResponse = await fetch(`http://localhost:8000/api/temp_list?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}&date=${this.selectedDate}`);
-      this.tempList = await tempResponse.json();
+      const timeResponse = await fetch(`http://localhost:8000/api/sensor_time_list?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}&date=${this.selectedDate}`);
+      this.sensorTimeList = await timeResponse.json();
+      const tempResponse = await fetch(`http://localhost:8000/api/sensor_temp_list?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}&date=${this.selectedDate}`);
+      this.sensorTempList = await tempResponse.json();
+    },
+    async updateActivityChart() {
+      if (!this.selectedThermostat || !this.selectedDate) return;
+      const timeResponse = await fetch(`http://localhost:8000/api/thermostat_time_list?thermostat_id=${this.selectedThermostat}&date=${this.selectedDate}`);
+      this.thermostatTimeList = await timeResponse.json();
+      const activityResponse = await fetch(`http://localhost:8000/api/thermostat_activity_list?thermostat_id=${this.selectedThermostat}&date=${this.selectedDate}`)
+      this.thermostatActivityList = await activityResponse.json();
     }
   }
 };

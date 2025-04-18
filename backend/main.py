@@ -79,7 +79,7 @@ def get_date_options(thermostat_id: str, sensor_id: str):
         dates.append(date)
     return dates
 
-@app.get("/api/time_list")
+@app.get("/api/sensor_time_list")
 def get_time_list(thermostat_id: str, sensor_id: str, date: str):
     thermostat = manager.getThermostatByID(thermostat_id)
     if thermostat is None:
@@ -91,7 +91,7 @@ def get_time_list(thermostat_id: str, sensor_id: str, date: str):
 
     return sensor.getTimeList(date)
 
-@app.get("/api/temp_list")
+@app.get("/api/sensor_temp_list")
 def get_temp_list(thermostat_id: str, sensor_id: str, date: str):
     thermostat = manager.getThermostatByID(thermostat_id)
     if thermostat is None:
@@ -102,6 +102,22 @@ def get_temp_list(thermostat_id: str, sensor_id: str, date: str):
         return []
 
     return sensor.getTempList(date)
+
+@app.get("/api/thermostat_time_list")
+def get_thermostat_time_list(thermostat_id: str, date: str):
+    thermostat = manager.getThermostatByID(thermostat_id)
+    if thermostat is None:
+        return []
+
+    return thermostat.getTimeList(date)
+
+@app.get("/api/thermostat_activity_list")
+def get_thermostat_activity_list(thermostat_id: str, date: str):
+    thermostat = manager.getThermostatByID(thermostat_id)
+    if thermostat is None:
+        return []
+
+    return thermostat.getActivityList(date)
 
 # Methods
 
