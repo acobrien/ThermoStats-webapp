@@ -81,7 +81,7 @@ class SystemManager:
                         thermostat = Thermostat(tokens[0])
                         self.addThermostat(thermostat)
 
-                        for token in tokens[2:]:
+                        for token in tokens[1:]:
                             sensor = Sensor(token)
                             self.addSensor(thermostat, sensor)
                     
