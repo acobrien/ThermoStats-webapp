@@ -38,7 +38,7 @@ export default {
       const chartData = {
         labels: this.timeList,
         datasets: [{
-          label: 'Temperature',
+          label: 'Sensor Temperature',
           data: this.tempList,
           borderColor: 'forestgreen',
           tension: 0.3,

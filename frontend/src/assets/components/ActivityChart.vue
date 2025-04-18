@@ -38,7 +38,7 @@ export default {
       const chartData = {
         labels: this.timeList,
         datasets: [{
-          label: 'Activity',
+          label: 'Thermostat Activity',
           data: this.activityList,
           borderColor: 'crimson',
           tension: 0.3,

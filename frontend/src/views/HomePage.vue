@@ -1,19 +1,22 @@
 <template>
-<div class="home">
 
-  <div>
-    <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
-  </div>
+  <title>Home</title>
 
-  <div class="info">
-    <h1>ThermoStats Home</h1>
-    <div class="button-group">
-      <button @click="navigateToDashboard">Dashboard</button>
-      <button @click="navigateToAnalytics">Analytics</button>
+  <div class="home">
+
+    <div>
+      <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
     </div>
-  </div>
 
-</div>
+    <div class="info">
+      <h1>ThermoStats Home</h1>
+      <div class="button-group">
+        <button @click="navigateToDashboard">Dashboard</button>
+        <button @click="navigateToAnalytics">Analytics</button>
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <script>

@@ -1,4 +1,6 @@
 <template>
+
+
   <div>
     <router-link to="/">
       <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
