@@ -40,7 +40,7 @@ export default {
         datasets: [{
           label: 'Temperature',
           data: this.tempList,
-          borderColor: '#4CAF50',
+          borderColor: 'forestgreen',
           tension: 0.3,
           fill: false
         }]

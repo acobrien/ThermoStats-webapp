@@ -72,12 +72,11 @@ export default {
       if (!this.selectedThermostat) return;
       this.date_options = [];
       this.selectedSensor = '';
-      this.selectedDate = '';
       const response = await fetch(`http://localhost:8000/api/sensor_options?thermostat_id=${this.selectedThermostat}`);
       this.sensor_options = await response.json();
     },
     async updateDates() {
-      if (!this.selectedThermostat || !this.selectedSensor) return;
+      if (!this.selectedThermostat) return;
       const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedThermostat}`);
       this.date_options = await response.json();
     },

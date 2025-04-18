@@ -40,7 +40,7 @@ export default {
         datasets: [{
           label: 'Activity',
           data: this.activityList,
-          borderColor: '#4CAF50',
+          borderColor: 'crimson',
           tension: 0.3,
           fill: false
         }]
