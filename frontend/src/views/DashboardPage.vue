@@ -1,6 +1,5 @@
 <template>
   <body>
-
     <div class="select-container">
       <!-- Thermostat Select -->
       <div class="select-wrapper">
@@ -133,10 +132,6 @@ select {
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
-}
-
-.charts-container {
-  max-height: 90vh
 }
 
 .charts-container > * {
