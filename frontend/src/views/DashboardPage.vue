@@ -11,7 +11,7 @@
 
     <!-- Sensor Select -->
     <div class="select-wrapper">
-      <select v-model="selectedSensor" @change="updateDates">
+      <select v-model="selectedSensor" @change="updateDates(); updateChart();">
         <option v-for="option in sensor_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -71,7 +71,6 @@ export default {
     },
     async updateDates() {
       if (!this.selectedThermostat || !this.selectedSensor) return;
-      this.selectedDate = '';
       const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}`);
       this.date_options = await response.json();
     },

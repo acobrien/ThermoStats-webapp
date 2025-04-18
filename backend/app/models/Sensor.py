@@ -26,19 +26,19 @@ class Sensor:
             raise KeyError(f"{date} not found")
 
     def getTimeList(self, date):
-        timeList = OrderedSet()
+        timeList = []
         if date in self.dateMap:
             for time in self.dateMap[date]:
-                timeList.add(time)
+                timeList.append(time)
             return timeList
         else:
             return KeyError("Date not found in dateMap")
 
     def getTempList(self, date):
-        tempList = OrderedSet()
+        tempList = []
         if date in self.dateMap:
             for time in self.dateMap[date]:
-                tempList.add(self.dateMap[date][time])
+                tempList.append(self.dateMap[date][time])
             return tempList
         else:
             return KeyError("Date not found in dateMap")
