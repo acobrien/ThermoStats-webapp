@@ -9,6 +9,7 @@
     <!-- Thermostat Select -->
     <div class="select-wrapper">
       <select v-model="selectedThermostat" @change="updateSensors(); updateDates(); updateActivityChart();">
+        <option disabled value="">Thermostat</option>
         <option v-for="option in thermostat_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -18,6 +19,7 @@
     <!-- Sensor Select -->
     <div class="select-wrapper">
       <select v-model="selectedSensor" @change="updateTemperatureChart();">
+        <option disabled value="">Sensor</option>
         <option v-for="option in sensor_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -27,6 +29,7 @@
     <!-- Date Select -->
     <div class="select-wrapper">
       <select v-model="selectedDate" @change="updateTemperatureChart(); updateActivityChart();">
+        <option disabled value="">Date</option>
         <option v-for="option in date_options" :key="option" :value="option">
           {{ option }}
         </option>
