@@ -15,11 +15,5 @@
 </script>
 
 <style scoped>
-.logo {
-  display: block;
-  align-content: center;
-  max-width: 25%;
-  height: auto;
-  margin: auto;
-}
+
 </style>

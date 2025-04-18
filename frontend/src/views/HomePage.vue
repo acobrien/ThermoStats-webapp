@@ -31,14 +31,6 @@ export default {
 </script>
 
 <style scoped>
-.logo {
-  display: block;
-  align-content: center;
-  max-width: 25%;
-  height: auto;
-  margin: auto;
-}
-
 .info {
   display: flex;
   flex-direction: column;
