@@ -1,4 +1,4 @@
-from SystemManager import SystemManager
+from .SystemManager import SystemManager
 
 
 manager = SystemManager()

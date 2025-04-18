@@ -1,6 +1,6 @@
-from Thermostat import Thermostat
-from Sensor import Sensor
-from ThermostatAnalyzer import ThermostatAnalyzer
+from .Thermostat import Thermostat
+from .Sensor import Sensor
+from .ThermostatAnalyzer import ThermostatAnalyzer
 from ordered_set import OrderedSet
 import re, os
 from time import strftime, localtime
