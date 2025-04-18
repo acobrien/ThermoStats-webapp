@@ -2,7 +2,7 @@
   <div class="select-container">
     <!-- Thermostat Select -->
     <div class="select-wrapper">
-      <select v-model="selectedThermostat" @change="updateSensors(); updateActivityChart()">
+      <select v-model="selectedThermostat" @change="updateSensors(); updateDates(); updateActivityChart();">
         <option v-for="option in thermostat_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -11,7 +11,7 @@
 
     <!-- Sensor Select -->
     <div class="select-wrapper">
-      <select v-model="selectedSensor" @change="updateDates(); updateTemperatureChart();">
+      <select v-model="selectedSensor" @change="updateTemperatureChart();">
         <option v-for="option in sensor_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -20,7 +20,7 @@
 
     <!-- Date Select -->
     <div class="select-wrapper">
-      <select v-model="selectedDate" @change="updateTemperatureChart()">
+      <select v-model="selectedDate" @change="updateTemperatureChart(); updateActivityChart();">
         <option v-for="option in date_options" :key="option" :value="option">
           {{ option }}
         </option>
@@ -78,7 +78,7 @@ export default {
     },
     async updateDates() {
       if (!this.selectedThermostat || !this.selectedSensor) return;
-      const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedThermostat}&sensor_id=${this.selectedSensor}`);
+      const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedThermostat}`);
       this.date_options = await response.json();
     },
     async updateTemperatureChart() {

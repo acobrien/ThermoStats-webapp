@@ -53,6 +53,13 @@ class Thermostat:
     def getSensors(self):
         return self.sensors
 
+    def getDates(self):
+        dates = []
+        for date in self.dateActivityMap:
+            dates.append(date)
+        return dates
+
+
     def getSensorByID(self, searchID):
         for sensor in self.sensors:
             if sensor.getSensorID() == searchID:

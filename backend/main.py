@@ -65,19 +65,12 @@ def get_sensor_options(thermostat_id: str):
     return sensors
 
 @app.get("/api/date_options")
-def get_date_options(thermostat_id: str, sensor_id: str):
+def get_date_options(thermostat_id: str):
     thermostat = manager.getThermostatByID(thermostat_id)
     if thermostat is None:
         return []
 
-    sensor = thermostat.getSensorByID(sensor_id)
-    if sensor is None:
-        return []
-
-    dates = []
-    for date in sensor.getDates():
-        dates.append(date)
-    return dates
+    return thermostat.getDates()
 
 @app.get("/api/sensor_time_list")
 def get_time_list(thermostat_id: str, sensor_id: str, date: str):
