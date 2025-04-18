@@ -1,6 +1,6 @@
-from .Thermostat import Thermostat
-from .Sensor import Sensor
-from .ThermostatAnalyzer import ThermostatAnalyzer
+from Thermostat import Thermostat
+from Sensor import Sensor
+from ThermostatAnalyzer import ThermostatAnalyzer
 from ordered_set import OrderedSet
 import re, os
 from time import strftime, localtime
@@ -91,9 +91,9 @@ class SystemManager:
                         for thermostat in self.thermostats:
                             if thermostat.getThermostatIDNum() == tokens[1]:
                                 temperatureIndex = 3
-                                energyIndex = 2
+                                activityIndex = 2
 
-                                thermostat.addEnergy(timestamp, tokens[energyIndex])
+                                thermostat.addActivity(timestamp, tokens[activityIndex])
 
                                 for sensor in thermostat.getSensors():
                                     thermostat.addTemperature(sensor, timestamp, float(tokens[temperatureIndex]))
