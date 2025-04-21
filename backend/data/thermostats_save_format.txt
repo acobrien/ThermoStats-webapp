@@ -2,13 +2,13 @@ Filename: Date
 Field 1: Time
 Field 2: Epoch
 Field 3: Thermostat (0 or 1)
-Field 4: State
+Field 4: States:
 	Idle = 0
 	Heating = 1
-	Cooling = 2
-	Lockout = 3
-	Error = 4
-	Airwave = 5
+	Cooling = 2 
+	Lockout = 3 (HVAC unit can go into a lockout mode to defrost, etc)
+	Error = 4 (HVAC equipment error)
+	Airwave = 5 (Fan on without Heat or Cool)
 	Offline = 6
 Field 5: Stage
 	Stage 1 (Heating / Cooling)
@@ -38,3 +38,15 @@ Thermostat 1 - West Side
 	Sensor 8: Outside
 	Sensor 9: HVAC Supply
 	Sensor 10: Average of 1,2,3,4,&5
+
+For Cool mode: .0591kwh/m
+For Heat mode: pretend the same: .0591kwh/m
+For Airwave mode: .0071lkwh/m
+
+Electric cost (with all taxes): $0.152/kwh
+
+On 4/20, the West Side ran in Cool mode for 129m at 0.0591kwh/m = 7.624kwh x $0.152 = $1.16
+On 4/20, the West Side ran in Airwave mode for 120m at 0.0071kwh/m = 0.852kwh x $0.152 = $0.13
+
+On 4/20, the East Side ran in Cool mode for 269m at 0.0591kwh/m = 15.898kwh x $0.152 = $2.42
+On 4/20, the East Side ran in Airwave mode for 296m at 0.0071kwh/m = 2.1kwh x $0.152 = $0.32
