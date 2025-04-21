@@ -120,38 +120,21 @@ def get_thermostat_activity_list(thermostat_id: str, date: str):
 
 # Want a graph with plotted points of (avg temp, energy cost)
 # X-axis: daily avg temp, Y-axis: daily energy cost
+# QRF + Spline should smooth out noise and provide a smooth function for prediction/graphing
 
 @app.get("/api/get_energy_function")
-# def get_energy_function(thermostat_id: str, date: str):
-#     # === 1. Load your data ===
-#     # Replace this with your actual DataFrame
-#     # Assume df has columns: ['avg_temp', 'energy_cost']
-#     df = pd.read_csv("your_data.csv")  # or however you load your data
-#     X = df[['avg_temp']].values
-#     y = df['energy_cost'].values
-#
-#     # === 2. Train QRF model ===
-#     qrf = RandomForestQuantileRegressor(random_state=42, n_estimators=100)
-#     qrf.fit(X, y)
-#
-#     # === 3. Predict on a fine grid ===
-#     temps_grid = np.linspace(X.min(), X.max(), 500).reshape(-1, 1)
-#     median_preds = qrf.predict(temps_grid, quantile=50)
-#
-#     # === 4. Create spline interpolator ===
-#     spline_fn = CubicSpline(temps_grid.flatten(), median_preds)
-#
-#     # === 5. Use the interpolator ===
-#     # Example: Predict energy cost at 72.5°F
-#     predicted_cost = spline_fn(72.5)
-#     print(f"Predicted cost at 72.5°F: {predicted_cost:.2f}")
-#
-#     # === 6. Optionally define a function to reuse ===
-#     def predict_energy_cost(temp):
-#         """
-#         Predict energy cost using QRF + spline interpolation.
-#         """
-#         return spline_fn(temp)
+def get_energy_function(thermostat_id: str, date: str):
+    temperatures = [] # Need a method to get outside temperatures from a given day
+    energy_costs = [] # Need a method to get energy costs for from full days, given a thermostat
+    spline_fn = get_spline_fn(temperatures, energy_costs)
+    return spline_fn
+
+@app.get("/api/get_energy_prediction")
+def get_energy_prediction(thermostat_id: str, date: str, temperature: float):
+    temperatures = [] # Need a method to get outside temperatures from a given day
+    energy_costs = [] # Need a method to get energy costs for from full days, given a thermostat
+    spline_fn = get_spline_fn(temperatures, energy_costs)
+    return spline_fn(temperature)
 
 # Methods
 
@@ -165,3 +148,16 @@ def write_to_save(raw_filename, save_path):
 def write_all_to_save():
     for filename in os.listdir(RAW_DIR):
         write_to_save(filename, SAVE_PATH)
+
+def get_spline_fn(X, y):
+    # Train QRF model
+    qrf = RandomForestQuantileRegressor(random_state=42, n_estimators=100)
+    qrf.fit(X, y)
+
+    # Predict on a fine grid
+    temps_grid = np.linspace(X.min(), X.max(), 500).reshape(-1, 1)
+    median_preds = qrf.predict(temps_grid, quantile=50)
+
+    # Create spline interpolator
+    spline_fn = CubicSpline(temps_grid.flatten(), median_preds)
+    return spline_fn
