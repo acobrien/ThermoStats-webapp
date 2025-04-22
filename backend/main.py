@@ -126,12 +126,48 @@ def get_thermostat_activity_list(thermostat_id: str, date: str):
 # X-axis: daily avg temp, Y-axis: daily energy cost
 # QRF + Spline should smooth out noise and provide a smooth function for prediction/graphing
 
-@app.get("/api/get_energy_function")
-def get_energy_function(thermostat_id: str, date: str):
-    temperatures = manager.getAvgOutsideTemperatures()
-    energy_costs = manager.getEnergyCosts()
-    spline_fn = get_spline_fn(temperatures, energy_costs)
-    return spline_fn
+@app.get("/api/get_average_temperatures")
+def get_average_temperatures():
+    return manager.getAvgOutsideTemperatures()
+
+@app.get("/api/get_energy_costs")
+def get_energy_costs():
+    return manager.getEnergyCosts()
+
+@app.get("/api/get_interpolated_temperatures")
+def get_interpolated_temps():
+    temps = np.array(manager.getAvgOutsideTemperatures())
+
+    firstTemp = np.min(temps)
+    lastTemp = np.max(temps)
+
+    delta = lastTemp / firstTemp
+    h = delta / 100 # arbitrary n value, can change
+
+    interpolatedTemps = []
+    while firstTemp < lastTemp:
+        interpolatedTemps.append(firstTemp)
+        firstTemp += h
+
+    return interpolatedTemps
+
+@app.get("/api/get_interpolated_costs")
+def get_interpolated_costs:
+    temps = np.array(manager.getAvgOutsideTemperatures())
+    firstTemp = np.min(temps)
+    lastTemp = np.max(temps)
+
+    delta = lastTemp / firstTemp
+    h = delta / 100 # arbitrary n value, can change
+
+    spline_fn = get_spline_fn(manager.getAvgOutsideTemperatures(), manager.getEnergyCosts())
+
+    interpolatedCosts = []
+    while firstTemp < lastTemp:
+        interpolatedTemps.append(spline_fn(firstTemp))
+        firstTemp += h
+
+    return interpolatedCosts
 
 @app.get("/api/get_energy_prediction")
 def get_energy_prediction(thermostat_id: str, date: str, temperature: float):
@@ -139,10 +175,6 @@ def get_energy_prediction(thermostat_id: str, date: str, temperature: float):
     energy_costs = manager.getEnergyCosts()
     spline_fn = get_spline_fn(temperatures, energy_costs)
     return spline_fn(temperature)
-
-@app.get("/api/test_energy_costs")
-def test_energy_costs():
-    return manager.getEnergyCosts()
 
 # Methods
 
