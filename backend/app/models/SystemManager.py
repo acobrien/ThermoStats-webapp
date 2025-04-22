@@ -138,6 +138,7 @@ class SystemManager:
         costs = []
 
         for date in outsideSensor.getFullDates():
+            cost = 0
             for thermostat in self.getThermostats():
                 cost += thermostat.getEnergyCost(date)
             costs.append(cost)

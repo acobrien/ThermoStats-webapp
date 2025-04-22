@@ -66,9 +66,9 @@ class Thermostat:
         if date in self.dateActivityMap:
             for time in self.dateActivityMap[date]:
                 match self.dateActivityMap[date][time]:
-                    case 1 | 2: # heating | cooling
-                        cost += 0.2955 # half of value from sav_format because it is a 30 second reading
-                    case 5: # airwave
+                    case "1" | "2": # heating | cooling
+                        cost += 0.2955 # half of value from save_format because it is a 30 second reading
+                    case "5": # airwave
                         cost += 0.00355
             return cost
         else:
