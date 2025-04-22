@@ -70,7 +70,7 @@ class Thermostat:
                         cost += 0.2955 # half of value from save_format because it is a 30 second reading
                     case "5": # airwave
                         cost += 0.00355
-            return cost
+            return cost * 0.152 # price per kwh
         else:
             return KeyError("Date not found in dateActivityMap")
 
