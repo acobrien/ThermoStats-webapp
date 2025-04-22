@@ -10,8 +10,10 @@ class Thermostat:
         if self.thermostatID == "0":
             self.sensorKeys = OrderedSet(["Master Bedroom","Master Bathroom","Office",
                         "Ty's Bedroom","Luke's Bedroom","Sabry's Bedroom","Living Room"])
+
         elif self.thermostatID == "1":
             self.sensorKeys = OrderedSet(["Brody's Bedroom","Kitchen","Den","Bar","Living Room","Outside"])
+
         else:
             self.sensorKeys = OrderedSet()
 
@@ -59,6 +61,18 @@ class Thermostat:
             dates.append(date)
         return dates
 
+    def getEnergyCost(self, date):
+        cost = 0
+        if date in self.dateActivityMap:
+            for time in self.dateActivityMap[date]:
+                match self.dateActivityMap[date][time]:
+                    case 1 | 2: # heating | cooling
+                        cost += 0.2955 # half of value from sav_format because it is a 30 second reading
+                    case 5: # airwave
+                        cost += 0.00355
+            return cost
+        else:
+            return KeyError("Date not found in dateActivityMap")
 
     def getSensorByID(self, searchID):
         for sensor in self.sensors:

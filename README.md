@@ -12,7 +12,9 @@ py -m venv venv
 
 venv\Scripts\activate
 
-pip install fastapi uvicorn ordered_set scikit-learn scikit-garden scipy pandas
+pip install fastapi uvicorn ordered_set scikit-learn scipy pandas
+
+pip install git+https://github.com/Demangio/scikit-garden.git
 
 uvicorn main:app --reload
 

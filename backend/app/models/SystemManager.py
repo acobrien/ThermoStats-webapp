@@ -115,6 +115,35 @@ class SystemManager:
                 return thermostatAnalyzer.analysisGetNumericalStats(date)
         return "Unable to locate Thermostat Analyzer"
 
+    def getAvgOutsideTemperatures(self):
+        temperatures = []
+        westThermostat = self.getThermostatByID("West Side")
+        outsideSensor = westThermostat.getSensorByID("Outside")
+
+        for date in outsideSensor.getFullDates():
+            total = 0
+            count = 0
+
+            for temperature in outsideSensor.getTempList(date):
+                total += temperature
+                count += 1
+
+            temperatures.append(float(total) / count)
+
+        return temperatures
+
+    def getEnergyCosts(self):
+        westThermostat = self.getThermostatByID("West Side")
+        outsideSensor = westThermostat.getSensorByID("Outside")
+        costs = []
+
+        for date in outsideSensor.getFullDates():
+            for thermostat in self.getThermostats():
+                cost += thermostat.getEnergyCost(date)
+            costs.append(cost)
+
+        return costs
+
     def __str__(self):
         toString = "Thermostat Manager:\n"
         for thermostat in self.thermostats:

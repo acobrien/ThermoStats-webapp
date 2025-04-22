@@ -54,6 +54,13 @@ class Sensor:
 
     def getDates(self):
         return list(self.dateMap.keys())
+
+    def getFullDates(self):
+        dates = []
+        for date in self.getDates():
+            if len(self.getTimeList(date)) > 2500: # Should be 2880, I'm giving it some leeway
+                dates.append(date)
+        return dates
     
     def getDayMap(self, date):
         return self.dateMap.get(date)

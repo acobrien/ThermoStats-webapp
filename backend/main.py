@@ -24,9 +24,13 @@ async def startup():
 
     if os.path.getsize(SAVE_PATH) > 0:
         load_save(SAVE_PATH)
+
     else:
         write_all_to_save()
         load_save(SAVE_PATH)
+
+async def shutdown():
+    return
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -124,17 +128,21 @@ def get_thermostat_activity_list(thermostat_id: str, date: str):
 
 @app.get("/api/get_energy_function")
 def get_energy_function(thermostat_id: str, date: str):
-    temperatures = [] # Need a method to get outside temperatures from a given day
-    energy_costs = [] # Need a method to get energy costs for from full days, given a thermostat
+    temperatures = manager.getAvgOutsideTemperatures()
+    energy_costs = manager.getEnergyCosts()
     spline_fn = get_spline_fn(temperatures, energy_costs)
     return spline_fn
 
 @app.get("/api/get_energy_prediction")
 def get_energy_prediction(thermostat_id: str, date: str, temperature: float):
-    temperatures = [] # Need a method to get outside temperatures from a given day
-    energy_costs = [] # Need a method to get energy costs for from full days, given a thermostat
+    temperatures = manager.getAvgOutsideTemperatures()
+    energy_costs = manager.getEnergyCosts()
     spline_fn = get_spline_fn(temperatures, energy_costs)
     return spline_fn(temperature)
+
+@app.get("/api/test_energy_costs")
+def test_energy_costs():
+    return manager.getEnergyCosts()
 
 # Methods
 
