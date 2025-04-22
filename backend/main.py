@@ -141,30 +141,22 @@ def get_interpolated_temps():
     firstTemp = np.min(temps)
     lastTemp = np.max(temps)
 
-    delta = lastTemp / firstTemp
-    h = delta / 100 # arbitrary n value, can change
-
-    interpolatedTemps = []
-    while firstTemp < lastTemp:
-        interpolatedTemps.append(firstTemp)
-        firstTemp += h
-
-    return interpolatedTemps
+    return np.linspace(firstTemp, lastTemp, num=100).tolist()
 
 @app.get("/api/get_interpolated_costs")
-def get_interpolated_costs:
+def get_interpolated_costs():
     temps = np.array(manager.getAvgOutsideTemperatures())
     firstTemp = np.min(temps)
     lastTemp = np.max(temps)
 
-    delta = lastTemp / firstTemp
+    delta = lastTemp - firstTemp
     h = delta / 100 # arbitrary n value, can change
 
     spline_fn = get_spline_fn(manager.getAvgOutsideTemperatures(), manager.getEnergyCosts())
 
     interpolatedCosts = []
     while firstTemp < lastTemp:
-        interpolatedTemps.append(spline_fn(firstTemp))
+        interpolatedCosts.append(spline_fn(firstTemp))
         firstTemp += h
 
     return interpolatedCosts

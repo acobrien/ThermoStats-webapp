@@ -19,32 +19,6 @@ export default {
     interpolatedTemps: Array,
     interpolatedCosts: Array
   },
-  watch: {
-    recordedTemps: {
-      handler() {
-        this.renderChart();
-      },
-      deep: true
-    },
-    recordedCosts: {
-      handler() {
-        this.renderChart();
-      },
-      deep: true
-    },
-    interpolatedTemps: {
-      handler() {
-        this.renderChart();
-      },
-      deep: true
-    },
-    interpolatedCosts: {
-      handler() {
-        this.renderChart();
-      },
-      deep: true
-    }
-  },
   methods: {
     renderChart() {
       if (
