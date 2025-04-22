@@ -35,9 +35,10 @@ export default {
             label: 'Interpolated Energy Cost',
             data: this.interpolatedCosts,
             borderColor: 'blue',
+            borderWidth: 2,
             tension: 0.3,
             fill: false,
-            pointRadius: 0, // Hide points for interpolated data
+            pointRadius: 1, // Hide points for interpolated data
           },
           {
             label: 'Recorded Data',
@@ -67,7 +68,7 @@ export default {
           y: {
             title: {
               display: true,
-              text: 'Energy Cost'
+              text: 'Energy Cost - $'
             }
           }
         }

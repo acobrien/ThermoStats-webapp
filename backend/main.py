@@ -9,8 +9,9 @@ from app.models.SystemManager import SystemManager
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from skgarden import RandomForestQuantileRegressor
+from quantile_forest import RandomForestQuantileRegressor
 from scipy.interpolate import CubicSpline
+from scipy.interpolate import make_smoothing_spline
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # backend/
 DATA_DIR = os.path.join(BASE_DIR, "data")             # backend/data/
@@ -141,7 +142,7 @@ def get_interpolated_temps():
     firstTemp = np.min(temps)
     lastTemp = np.max(temps)
 
-    return np.linspace(firstTemp, lastTemp, num=100).tolist()
+    return np.linspace(firstTemp, lastTemp, num=1000).tolist()
 
 @app.get("/api/get_interpolated_costs")
 def get_interpolated_costs():
@@ -150,13 +151,14 @@ def get_interpolated_costs():
     lastTemp = np.max(temps)
 
     delta = lastTemp - firstTemp
-    h = delta / 100 # arbitrary n value, can change
+    h = delta / 1000 # arbitrary n value, can change
 
     spline_fn = get_spline_fn(manager.getAvgOutsideTemperatures(), manager.getEnergyCosts())
 
     interpolatedCosts = []
     while firstTemp < lastTemp:
-        interpolatedCosts.append(spline_fn(firstTemp))
+        cost = spline_fn(firstTemp)
+        interpolatedCosts.append(float(cost)) # convert np scalar to Python float
         firstTemp += h
 
     return interpolatedCosts
@@ -181,15 +183,17 @@ def write_all_to_save():
     for filename in os.listdir(RAW_DIR):
         write_to_save(filename, SAVE_PATH)
 
+
 def get_spline_fn(X, y):
-    # Train QRF model
-    qrf = RandomForestQuantileRegressor(random_state=42, n_estimators=100)
-    qrf.fit(X, y)
+    # Ensure X and y are numpy arrays
+    X = np.array(X)
+    y = np.array(y)
 
-    # Predict on a fine grid
-    temps_grid = np.linspace(X.min(), X.max(), 500).reshape(-1, 1)
-    median_preds = qrf.predict(temps_grid, quantile=50)
+    # Sort the data by X to ensure increasing order
+    sorted_indices = np.argsort(X)
+    X_sorted = X[sorted_indices]
+    y_sorted = y[sorted_indices]
 
-    # Create spline interpolator
-    spline_fn = CubicSpline(temps_grid.flatten(), median_preds)
+    # Create smoothing spline
+    spline_fn = make_smoothing_spline(X_sorted, y_sorted)
     return spline_fn
