@@ -185,15 +185,11 @@ def write_all_to_save():
 
 
 def get_spline_fn(X, y):
-    # Ensure X and y are numpy arrays
-    X = np.array(X)
-    y = np.array(y)
+    df = pd.DataFrame({'X': X, 'y': y})
+    df_avg = df.groupby('X', as_index=False).mean()
 
-    # Sort the data by X to ensure increasing order
-    sorted_indices = np.argsort(X)
-    X_sorted = X[sorted_indices]
-    y_sorted = y[sorted_indices]
+    X_avg = df_avg['X'].to_numpy()
+    y_avg = df_avg['y'].to_numpy()
 
-    # Create smoothing spline
-    spline_fn = make_smoothing_spline(X_sorted, y_sorted)
+    spline_fn = make_smoothing_spline(X_avg, y_avg)
     return spline_fn
