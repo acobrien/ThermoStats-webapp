@@ -32,13 +32,12 @@ export default {
         labels: this.interpolatedTemps,
         datasets: [
           {
-            label: 'Interpolated Energy Cost',
+            label: 'Interpolated Function',
             data: this.interpolatedCosts,
-            borderColor: 'blue',
-            borderWidth: 2,
+            borderColor: 'coral',
             tension: 0.3,
             fill: false,
-            pointRadius: 1, // Hide points for interpolated data
+            pointRadius: 1.5,
           },
           {
             label: 'Recorded Data',
@@ -46,8 +45,8 @@ export default {
               x: this.recordedTemps[index],
               y: cost
             })),
-            borderColor: 'crimson',
-            backgroundColor: 'crimson',
+            borderColor: 'paleturquoise',
+            backgroundColor: 'paleturquoise',
             type: 'scatter',
             showLine: false,
             pointRadius: 5,
@@ -69,6 +68,15 @@ export default {
             title: {
               display: true,
               text: 'Energy Cost - $'
+            }
+          }
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: 'Average Temperature vs. Daily Energy Cost',
+            font: {
+              size: 20
             }
           }
         }
