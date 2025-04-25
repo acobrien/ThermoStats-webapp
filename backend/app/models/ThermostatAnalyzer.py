@@ -14,7 +14,7 @@ class ThermostatAnalyzer:
         return self.thermostatAnalyzerID
         
     def analysisGetNumericalStats(self, date):
-        #Returns a set of [SensorID, MaxTemp, MinTemp, AverageTemp] for each sensor in thermostat
+        #Returns a set of [SensorID, MaxTempTimestamp, MaxTemp, MinTempTimestamp, MinTemp, AverageTemp] for each sensor in thermostat
         #-- print(str(self.thermostat.getThermostatID()) + ":") --NOTE: OLD CODE
         thermostatStatisticsSet = OrderedSet() #Set of sets of statistics for each sensor in thermostat
         sensors = self.thermostat.getSensors()
