@@ -16,39 +16,58 @@
     </energy-chart>
   </div>
 
-  <div class="select-container">
-    <!-- Thermostat Select -->
-    <div class="select-wrapper">
-      <select v-model="selectedThermostat" @change="updateSensors(); updateDates();">
-        <option disabled value="">Thermostat</option>
-        <option v-for="option in thermostat_options" :key="option" :value="option">
-          {{ option }}
-        </option>
-      </select>
+  <div class="select-and-stats-container">
+    <div class="select-container">
+      <!-- Thermostat Select -->
+      <div class="select-wrapper">
+        <select v-model="selectedThermostat" @change="updateDates(); updateStats();">
+          <option disabled value="">Thermostat</option>
+          <option v-for="option in thermostat_options" :key="option" :value="option">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Date Select -->
+      <div class="select-wrapper">
+        <select v-model="selectedDate" @change="updateStats();">
+          <option disabled value="">Date</option>
+          <option v-for="option in date_options" :key="option" :value="option">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+
+      <button @click="navigateToDashboard">Dashboard</button>
     </div>
 
-    <!-- Sensor Select -->
-    <div class="select-wrapper">
-      <select v-model="selectedSensor">
-        <option disabled value="">Sensor</option>
-        <option v-for="option in sensor_options" :key="option" :value="option">
-          {{ option }}
-        </option>
-      </select>
+    <!-- Statistics Display -->
+    <div class="statistics-container">
+      <div class="column">
+        <div v-for="(sensor, index) in columnOne" :key="index" class="sensor-card">
+          <h4>{{ sensor[0] }}</h4>
+          <p><strong>Max:</strong> {{ sensor[1] }} ({{ sensor[2] }}°)</p>
+          <p><strong>Min:</strong> {{ sensor[3] }} ({{ sensor[4] }}°)</p>
+          <p><strong>Avg:</strong> {{ sensor[5].toFixed(2) }}°</p>
+        </div>
+      </div>
+      <div class="column">
+        <div v-for="(sensor, index) in columnTwo" :key="index" class="sensor-card">
+          <h4>{{ sensor[0] }}</h4>
+          <p><strong>Max:</strong> {{ sensor[1] }} ({{ sensor[2] }}°)</p>
+          <p><strong>Min:</strong> {{ sensor[3] }} ({{ sensor[4] }}°)</p>
+          <p><strong>Avg:</strong> {{ sensor[5].toFixed(2) }}°</p>
+        </div>
+      </div>
+      <div class="column">
+        <div v-for="(sensor, index) in columnThree" :key="index" class="sensor-card">
+          <h4>{{ sensor[0] }}</h4>
+          <p><strong>Max:</strong> {{ sensor[1] }} ({{ sensor[2] }}°)</p>
+          <p><strong>Min:</strong> {{ sensor[3] }} ({{ sensor[4] }}°)</p>
+          <p><strong>Avg:</strong> {{ sensor[5].toFixed(2) }}°</p>
+        </div>
+      </div>
     </div>
-
-    <!-- Date Select -->
-    <div class="select-wrapper">
-      <select v-model="selectedDate">
-        <option disabled value="">Date</option>
-        <option v-for="option in date_options" :key="option" :value="option">
-          {{ option }}
-        </option>
-      </select>
-    </div>
-
-    <button @click="navigateToDashboard">Dashboard</button>
-
   </div>
 
   </body>
@@ -68,12 +87,22 @@ export default {
       interpolatedTempList: [],
       interpolatedCostList: [],
       selectedThermostat: '',
-      selectedSensor: '',
       selectedDate: '',
       thermostat_options: [],
-      sensor_options: [],
       date_options: [],
+      statistics: [],
     };
+  },
+  computed: {
+    columnOne() {
+      return this.statistics.filter((_, index) => index % 3 === 0);
+    },
+    columnTwo() {
+      return this.statistics.filter((_, index) => index % 3 === 1);
+    },
+    columnThree() {
+      return this.statistics.filter((_, index) => index % 3 === 2);
+    }
   },
   mounted() {
     this.fetchData();
@@ -108,18 +137,16 @@ export default {
     navigateToDashboard() {
       this.$router.push('/dashboard');
     },
-    async updateSensors() {
-      if (!this.selectedThermostat) return;
-      this.date_options = [];
-      this.selectedSensor = '';
-      const response = await fetch(`http://localhost:8000/api/sensor_options?thermostat_id=${this.selectedThermostat}`);
-      this.sensor_options = await response.json();
-    },
     async updateDates() {
       if (!this.selectedThermostat) return;
       const response = await fetch(`http://localhost:8000/api/date_options?thermostat_id=${this.selectedThermostat}`);
       this.date_options = await response.json();
     },
+    async updateStats() {
+      if (!this.selectedThermostat || !this.selectedDate) return;
+      const response = await fetch(`http://localhost:8000/api/get_statistics?thermostat_id=${this.selectedThermostat}&date=${this.selectedDate}`);
+      this.statistics = await response.json();
+    }
   }
 };
 </script>
@@ -127,5 +154,40 @@ export default {
 <style scoped>
 .charts-container > * {
   max-height: 39vh;
+}
+
+.select-and-stats-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.select-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.statistics-container {
+  padding: 10px;
+  gap: 20px;
+  white-space: pre-wrap;
+  display: flex;
+  flex-grow: 1;
+}
+
+.statistics-container {
+  display: flex;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+}
+
+.sensor-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 </style>

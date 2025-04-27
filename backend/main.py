@@ -122,10 +122,6 @@ def get_thermostat_activity_list(thermostat_id: str, date: str):
 
     return thermostat.getActivityList(date)
 
-# Want a graph with plotted points of (avg temp, energy cost)
-# X-axis: daily avg temp, Y-axis: daily energy cost
-# QRF + Spline should smooth out noise and provide a smooth function for prediction/graphing
-
 @app.get("/api/get_average_temperatures")
 def get_average_temperatures():
     return manager.getAvgOutsideTemperatures()
@@ -163,13 +159,18 @@ def get_interpolated_costs():
     return interpolatedCosts
 
 @app.get("/api/get_energy_prediction")
-def get_energy_prediction(thermostat_id: str, date: str, temperature: float):
+def get_energy_prediction(temperature: float):
     temperatures = manager.getAvgOutsideTemperatures()
     energy_costs = manager.getEnergyCosts()
     spline_fn = get_spline_fn(temperatures, energy_costs)
     return spline_fn(temperature)
 
-# Methods
+@app.get("/api/get_statistics")
+def get_statistics(thermostat_id: str, date: str):
+    analyzer_id = thermostat_id + " Analyzer"
+    return manager.callAnalysisGetNumericalStats(analyzer_id, date)
+
+# Internal Methods
 
 def load_save(save_filename):
     manager.loadSave(save_filename)

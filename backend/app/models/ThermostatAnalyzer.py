@@ -51,18 +51,18 @@ class ThermostatAnalyzer:
 
                     #Calculate average temperature and round each float to four decimal places 
                     averageTemp = round((tempsTotal / timesAndTempsLength), 4)
-                    print(f"entryTokens = {averageTemp}")
+                    #print(f"entryTokens = {averageTemp}")
                     maxTemp[1] = round(maxTemp[1], 4)
-                    print(f"entryTokens = {maxTemp}")
+                    #print(f"entryTokens = {maxTemp}")
                     minTemp[1] = round(minTemp[1], 4)
-                    print(f"entryTokens = {minTemp}")
+                    #print(f"entryTokens = {minTemp}")
 
                     sensorStatisticsSet.update([sensor.getSensorID(), maxTemp[0], maxTemp[1], minTemp[0], minTemp[1], averageTemp])
 
                     thermostatStatisticsSet.add(tuple(sensorStatisticsSet))
                 except Exception as e:
                     print(e)
-            return thermostatStatisticsSet    
+            return list(thermostatStatisticsSet)
         except KeyError as e:
             return e
         
