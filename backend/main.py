@@ -9,7 +9,6 @@ from app.models.SystemManager import SystemManager
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from quantile_forest import RandomForestQuantileRegressor
 from scipy.interpolate import CubicSpline
 from scipy.interpolate import make_smoothing_spline
 

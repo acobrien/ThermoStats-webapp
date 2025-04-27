@@ -12,7 +12,7 @@ py -m venv venv
 
 venv\Scripts\activate
 
-pip install fastapi uvicorn ordered_set scikit-learn scipy pandas quantile-forest
+pip install fastapi uvicorn ordered_set scikit-learn scipy pandas
 
 uvicorn main:app --reload
 
