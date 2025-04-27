@@ -1,10 +1,5 @@
 <template>
   <body>
-  <div>
-    <router-link to="/">
-      <img src="@/assets/images/ThermoStatsLogo.png" alt="ThermoStats Logo" class="logo" />
-    </router-link>
-  </div>
   <div class="charts-container">
     <energy-chart
         v-if="recordedTempList.length && recordedCostList.length &&
