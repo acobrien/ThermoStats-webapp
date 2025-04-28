@@ -130,6 +130,10 @@ def get_average_temperatures():
 def get_energy_costs():
     return manager.getEnergyCosts()
 
+@app.get("/api/thermostat_day_cost")
+def get_day_cost(thermostat_id: str, date: str):
+    return manager.getThermostatByID(thermostat_id).getEnergyCost(date)
+
 @app.get("/api/get_interpolated_temperatures")
 def get_interpolated_temps():
     temps = np.array(manager.getAvgOutsideTemperatures())

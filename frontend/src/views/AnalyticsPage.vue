@@ -15,7 +15,7 @@
     <div class="select-container">
       <!-- Thermostat Select -->
       <div class="select-wrapper">
-        <select v-model="selectedThermostat" @change="updateDates(); updateStats();">
+        <select v-model="selectedThermostat" @change="updateDates(); updateStats(); updateCost();">
           <option disabled value="">Thermostat</option>
           <option v-for="option in thermostat_options" :key="option" :value="option">
             {{ option }}
@@ -25,7 +25,7 @@
 
       <!-- Date Select -->
       <div class="select-wrapper">
-        <select v-model="selectedDate" @change="updateStats();">
+        <select v-model="selectedDate" @change="updateStats(); updateCost();">
           <option disabled value="">Date</option>
           <option v-for="option in date_options" :key="option" :value="option">
             {{ option }}
@@ -34,6 +34,10 @@
       </div>
 
       <button @click="navigateToDashboard">Dashboard</button>
+
+      <div v-if="selectedThermostat && selectedDate" class="cost-display">
+        <strong>{{ selectedThermostat }} on {{ selectedDate }}: ${{ formattedThermostatDayCost }}</strong>
+      </div>
     </div>
 
     <!-- Statistics Display -->
@@ -86,6 +90,7 @@ export default {
       thermostat_options: [],
       date_options: [],
       statistics: [],
+      thermostatDayCost: '',
     };
   },
   computed: {
@@ -97,6 +102,9 @@ export default {
     },
     columnThree() {
       return this.statistics.filter((_, index) => index % 3 === 2);
+    },
+    formattedThermostatDayCost() {
+      return Number(this.thermostatDayCost).toFixed(2);
     }
   },
   mounted() {
@@ -141,6 +149,11 @@ export default {
       if (!this.selectedThermostat || !this.selectedDate) return;
       const response = await fetch(`http://localhost:8000/api/get_statistics?thermostat_id=${this.selectedThermostat}&date=${this.selectedDate}`);
       this.statistics = await response.json();
+    },
+    async updateCost() {
+      if (!this.selectedThermostat || !this.selectedDate) return;
+      const response = await fetch(`http://localhost:8000/api/thermostat_day_cost?thermostat_id=${this.selectedThermostat}&date=${this.selectedDate}`);
+      this.thermostatDayCost = await response.json();
     }
   }
 };
@@ -184,5 +197,10 @@ export default {
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+.cost-display {
+  border: 1px solid #ccc;
+  padding: 10px;
 }
 </style>
