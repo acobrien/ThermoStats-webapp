@@ -1,3 +1,5 @@
+# ThermoStats - A webapp for accessing and analyzing data from an array of thermostats and sensors
+
 ![Dashboard Page Image](Dashboard.png)
 
 ![Analytics Page Image](Analytics.png)
