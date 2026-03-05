@@ -1,3 +1,7 @@
+![Dashboard Page Image](Dashboard.png)
+
+![Analytics Page Image](Analytics.png)
+
 To Run:
 
 NOTE: DEPENDENCIES NOT COMPATIBLE WITH PYTHON 3.14, USE 3.12 OR MAYBE 3.13 (UNTESTED)
