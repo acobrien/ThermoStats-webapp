@@ -1,5 +1,6 @@
 To Run:
 
+NOTE: DEPENDENCIES NOT COMPATIBLE WITH PYTHON 3.14, USE 3.12 OR MAYBE 3.13 (UNTESTED)
 Install Python: https://www.python.org/downloads/release/python-3132/
 
 Install Node.js (CLICK ADD TO PATH IN INSTALLER): https://nodejs.org/
